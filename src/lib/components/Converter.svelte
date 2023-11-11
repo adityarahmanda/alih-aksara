@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ConverterMethod } from "$lib/scripts/global";
 import { convert as latinJavaConvert } from "$lib/scripts/latinjava";
+import { convert as javaLatinConvert } from "$lib/scripts/javalatin";
 import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
 import CopyIcon from "./CopyIcon.svelte";
 
@@ -46,7 +47,12 @@ function onTextAreaInput()
         { 
             output = latinJavaConvert(input);
             break; 
-        } 
+        }
+        case ConverterMethod.JavaToLatin: 
+        {
+            output = javaLatinConvert(input) 
+            break; 
+        }
         case ConverterMethod.JavaToKawi: 
         {
             output = javaKawiConvert(input) 

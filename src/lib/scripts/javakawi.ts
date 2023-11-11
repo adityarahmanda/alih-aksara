@@ -1,4 +1,4 @@
-const signs = {
+const signs:{ [id: string]: string; }  = {
 	'ꦀ':'𑼀',      // KAWI SIGN CANDRABINDU (PANYANGGA) 
 	'ꦁ':'𑼁',      // KAWI SIGN ANUSVARA (CECAK)
 	'ꦂ':'𑼂',      // KAWI SIGN REPHA (LAYAR)
@@ -7,7 +7,7 @@ const signs = {
 	'ꦿ':'𑽂𑼬',      // LAYAR
 }
 
-const independentVowels = {
+const independentVowels:{ [id: string]: string; }  = {
 	'ꦄ':'𑼄',      // KAWI LETTER A
 	'ꦄꦴ':'𑼅',      // KAWI LETTER AA
 	'ꦅ':'𑼆',      // KAWI LETTER I (I KAWI)
@@ -24,7 +24,7 @@ const independentVowels = {
 	'ꦎ':'𑼐',      // KAWI LETTER O
 }
 
-const consonants = {
+const consonants:{ [id: string]: string; }  = {
 	'ꦏ':'𑼒',      // KAWI LETTER KA
 	'ꦑ':'𑼓',      // KAWI LETTER KHA (KA MURDA)
 	'ꦒ':'𑼔',      // KAWI LETTER GA
@@ -61,7 +61,7 @@ const consonants = {
 	'ꦘ' : '𑼳',       //KAWI LETTER JNYA
 }
 
-const dependentVowelSigns = {
+const dependentVowelSigns:{ [id: string]: string; }  = {
 	'ꦴ' : '𑼴',       //KAWI VOWEL SIGN AA
 	'ꦵ' : '𑼵',       //KAWI VOWEL SIGN ALTERNATE AA
 	'ꦶ' : '𑼶',       //KAWI VOWEL SIGN I
@@ -74,11 +74,11 @@ const dependentVowelSigns = {
 	'ꦼ' : '𑽀',       //KAWI VOWEL SIGN EU
 }
 
-const viramas = {
+const viramas:{ [id: string]: string; }  = {
 	'꧀' : '𑽂',       //KAWI CONJOINER
 }
 
-const punctuations = {
+const punctuations:{ [id: string]: string; }  = {
 	'꧈' : '𑽃',       //KAWI DANDA (PADA LINGSA)
 	'꧉' : '𑽄',       //KAWI DOUBLE DANDA (PADA LUNGSI)
 	'꧃' : '𑽅',       //KAWI PUNCTUATION SECTION MARKER
@@ -88,7 +88,7 @@ const punctuations = {
 	'꧂' : '𑽇',       //KAWI PUNCTUATION FLOWER
 }
 
-const digits = {
+const digits:{ [id: string]: string; }  = {
 	'꧐' : '𑽐',       //KAWI DIGIT ZERO
 	'꧑' : '𑽑',       //KAWI DIGIT ONE
 	'꧒' : '𑽒',       //KAWI DIGIT TWO
@@ -101,7 +101,7 @@ const digits = {
 	'꧙' : '𑽙',       //KAWI DIGIT NINE
 }
 
-const javaKawiDictionary = Object.assign(signs, independentVowels, consonants, dependentVowelSigns, viramas, punctuations, digits);
+const javaKawiDictionary:{ [id: string]: string; } = Object.assign(signs, independentVowels, consonants, dependentVowelSigns, viramas, punctuations, digits);
 
 const whitespaces = new Set([" ", "\u200b", "\t", "\n"]);
 
