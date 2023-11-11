@@ -65,10 +65,10 @@ function copyToClipboard(text:string) {
     navigator.clipboard.writeText(text)
         .then(res => {
             tooltipMessage = "Berhasil disalin";
-            tooltipEl.classList.remove("is-hidden");
+            tooltipEl.classList.add("show");
         }).catch(error => {
             tooltipMessage = "Gagal disalin";
-            tooltipEl.classList.remove("is-hidden");
+            tooltipEl.classList.add("show");
         });
 }
 
@@ -79,7 +79,7 @@ function onClickCopyButton()
 
 function onPointerLeaveCopyButton()
 {
-    tooltipEl.classList.add("is-hidden");
+    tooltipEl.classList.remove("show");
 }
 </script>
 
@@ -93,7 +93,7 @@ function onPointerLeaveCopyButton()
             <div class="content">
             <span>{ output }</span>
             <div class="action-button-area">
-                <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip is-hidden" data-text={ tooltipMessage } on:click={ onClickCopyButton } on:pointerleave={ onPointerLeaveCopyButton }>
+                <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip" data-text={ tooltipMessage } on:click={ onClickCopyButton } on:pointerleave={ onPointerLeaveCopyButton }>
                     <CopyIcon />
                 </button>
             </div>
