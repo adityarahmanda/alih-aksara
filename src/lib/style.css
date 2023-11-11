@@ -1,0 +1,137 @@
+:root {
+    --color-primary: #47311c;
+    --color-lightBrown: #ebe7e3;
+    --font-family-sans: "Mulish","Noto Sans Kawi","Noto Sans Javanese",sans-serif;
+    --converter-font-size: 1.6rem;
+    --converter-line-height: 1.8;
+    --converter-line-count: 6;
+    --converter-padding-y: .8rem;
+    --converter-padding-x: 1rem;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+main section {
+    flex: 1 1 auto;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: 900;
+}
+
+footer h5 {
+    font-weight: initial;
+}
+
+input:not([type=checkbox],[type=radio],[type=submit],[type=color],[type=button],[type=reset]):focus, select:focus, textarea:focus, textarea[type=text]:focus {
+    border-color: var(--color-lightBrown);
+    border-radius: 0.25rem;
+    outline: none;
+}
+
+input:not([type=checkbox],[type=radio],[type=submit],[type=color],[type=button],[type=reset]):hover, select:hover, textarea:hover, textarea[type=text]:hover {
+    border-color: var(--color-lightBrown);
+    outline: none;
+}
+
+textarea {
+    resize: none;
+}
+
+.nav .brand {
+    font-weight: 900;
+    padding: 0;
+}
+
+.nav a {
+    font-weight: 900;
+    padding: 1rem 1.2rem;
+}
+
+.tabs>.dropdown>summary, .tabs>a {
+    border: none;
+}
+
+.tabs>a.active, .tabs>a:hover, .tabs>a[aria-current=page] {
+    border: none;
+}
+
+.tabs a {
+    font-weight: 900;
+    border: none;
+}
+
+a:hover:not(.button) {
+    opacity: 1;
+}
+
+.converter-input, .converter-output {
+    max-width: calc(50% - var(--grid-gutter));
+}
+
+.converter-input textarea, .converter-output .content {
+    position: relative;
+    padding: var(--converter-padding-y) var(--converter-padding-x);
+    border-radius: 0.25rem;
+    width: 100%;
+    height: calc(var(--converter-font-size) * var(--converter-line-height) * var(--converter-line-count) + var(--converter-padding-y) * 2);
+    font-size: var(--converter-font-size);
+    line-height: var(--converter-line-height);
+    word-wrap: break-word;
+    overflow: auto;
+}
+
+.converter-output .content {
+    background-color: var(--color-lightBrown);
+}
+
+.converter-output .copy {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.tooltip {
+    position:relative;
+}
+
+.tooltip.show:before, .tooltip.show:after {
+    display:block;
+}
+
+.tooltip:before {
+    content: attr(data-text);
+    position:absolute;
+    top:50%;
+    right:100%;
+    margin-right:5px;
+    transform:translateY(-50%);
+    white-space:nowrap;
+    padding:0.8rem 1rem;
+    border-radius:5px;
+    background:#000;
+    color: #fff;
+    text-align:center;
+    display:none;
+}
+
+.tooltip:after {
+    content: "";
+    position:absolute;
+    top:50%;
+    right:100%;
+    margin-right:-5px;
+    transform:translateY(-50%);
+    border:5px solid #000;
+    border-color: transparent transparent transparent black;
+    display:none;
+}
