@@ -1,18 +1,19 @@
 <!-- src/routes/+layout.svelte -->
-<script>
+<script lang="ts">
     import '$lib/chota.min.css';
     import '$lib/style.css';
+    import { base } from '$app/paths';
 </script>
 
 <main class="container">
     <nav class="nav">
         <div class="nav-left">
-            <a class="brand" href="#">alih aksara</a>
+            <a class="brand" href="{ base }">alih aksara</a>
         </div>
         <div class="nav-right">
-            <a href="#">Latin-Jawa</a>
-            <a href="#">Jawa-Latin</a>
-            <a href="#">Jawa-Kawi</a>
+            <a href="{ base }/#">Latin-Jawa</a>
+            <a href="{ base }/#">Jawa-Latin</a>
+            <a href="{ base }/#">Jawa-Kawi</a>
         </div>
     </nav>
 
