@@ -8,7 +8,7 @@
 <main class="container">
     <nav class="nav">
         <div class="nav-left">
-            <a class="brand" href="{ base }">alih aksara</a>
+            <a class="brand" href="{ base }/">alih aksara</a>
         </div>
         <div class="nav-right">
             <a href="{ base }/latin-jawa">Latin-Jawa</a>
