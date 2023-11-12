@@ -3,7 +3,6 @@ import { ConverterMethod } from "$lib/scripts/global";
 import { convert as latinJavaConvert } from "$lib/scripts/latinjava";
 import { convert as javaLatinConvert } from "$lib/scripts/javalatin";
 import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
-import CopyIcon from "./CopyIcon.svelte";
 
 let input:string = "";
 let output:string = "";
@@ -13,7 +12,13 @@ let isPepetTypeMode:boolean = true;
 let isIgnoreSpace:boolean = true;
 let isMurda:boolean = false;
 let isDiphtong:boolean = false;
-let latinToJavaSpecialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
+let isShowVirtualKeyboard:boolean = false;
+let isCapslock:boolean = false;
+
+const latinToJavaSpecialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
+const javaDefaultKeyboardCharacters = ['꧇','꧑','꧒','꧓','꧔','꧕','꧖','꧗','꧘','꧙','꧐','꦳','ꦀ','꧀','ꦮ','ꦺ','ꦫ','ꦠ','ꦪ','ꦸ','ꦶ','ꦺꦴ','ꦥ','ꦁ','ꦂ','︀','ꦔ','ꦱ','ꦢ','ꦉ','ꦒ','ꦲ','ꦗ','ꦏ','ꦭ','ꦝ','ꦛ','ꦚ','ꦼ','ꦕ','ꦊ','ꦧ','ꦤ','ꦩ','꧈','꧉','꧋'];
+const javaCapslockKeyboardCharacters = ['꧊','ꦵ','ꧏ','꧆','꧞','꧟','꧃','꧄','꧅','꧌','꧍','ꦷ','ꦙ','ꦐ','ꦻ','ꦌ','ꦿ','ꦡ','ꦾ','ꦈ','ꦆ','ꦎ','ꦦ','꧁','꧂','​','ꦄ','ꦯ','ꦣ','ꦽ','ꦓ','ꦃ','ꦘ','ꦑ','ꦴ','ꦞ','ꦜ','ꦰ','ꦬ','ꦖ','ꦋ','ꦨ','ꦟ','ꦍ','ꦹ','ꦅ','ꦇ'];
+let javaKeyboardCharacters = isCapslock ? javaCapslockKeyboardCharacters : javaDefaultKeyboardCharacters;
 
 let tooltipEl:HTMLElement;
 let tooltipMessage:string = "";
@@ -47,7 +52,7 @@ function outputTitle():string
     return "Aksara Undefined";
 }
 
-function onInputTextarea()
+function onInputUpdate()
 {
     switch(method) { 
         case ConverterMethod.LatinToJava: 
@@ -68,7 +73,7 @@ function onInputTextarea()
     } 
 }
 
-function onKeyDownTextarea(e:KeyboardEvent) {
+function onInputKeyDown(e:KeyboardEvent) {
     if (method != ConverterMethod.LatinToJava) return;
     if(isPepetTypeMode == false) return;
 
@@ -90,12 +95,34 @@ function insertToTextarea(str:string) {
     // insert character
     var nextCursorPos = textareaEl.selectionStart + str.length;
     textareaEl.value = textareaEl.value.substring(0, textareaEl.selectionStart) + str + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
-    
+    input = textareaEl.value;
+
     // move cursor
     textareaEl.focus();
-    setTimeout(() => {
-        textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
-    }, 10);
+    textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
+}
+
+function onPressBackspace() {
+    if (textareaEl.selectionStart == 0 && textareaEl.selectionEnd == 0) 
+    {
+        textareaEl.focus();
+        textareaEl.setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd);
+        return;
+    }
+
+    var selectionLength = textareaEl.selectionStart - textareaEl.selectionEnd;
+    var nextCursorPos = selectionLength == 0 ? textareaEl.selectionStart - 1 : textareaEl.selectionStart;
+    textareaEl.value = textareaEl.value.substring(0, nextCursorPos) + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
+    input = textareaEl.value;
+
+    textareaEl.focus();
+    textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
+}
+
+function toggleCapslock()
+{
+    isCapslock = !isCapslock;
+    javaKeyboardCharacters = isCapslock ? javaCapslockKeyboardCharacters : javaDefaultKeyboardCharacters;
 }
 
 function copyToClipboard(text:string) {
@@ -120,50 +147,86 @@ function onPointerLeaveCopyButton()
 }
 </script>
 
-<section class="row converter">
-    <div class="col-12 converter-input">
-        <h4>{ inputTitle() }</h4>
-        <textarea bind:this={ textareaEl } bind:value={input} on:input={ onInputTextarea } on:keydown={ onKeyDownTextarea }></textarea>
+<svelte:head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</svelte:head>
 
-        {#if method == ConverterMethod.LatinToJava }
-        <div style="margin-block-start: 1em;">
-            <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" bind:checked={ isPepetTypeMode }>
-                Mode Ketik Pepet
-            </label>
-
-            <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" bind:checked={ isIgnoreSpace } on:change={ onInputTextarea }>
-                Abaikan Spasi
-            </label>
-
-            <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onInputTextarea }>
-                Murda
-            </label>
-
-            <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onInputTextarea }>
-                Diftong
-            </label>
+<section class="converter">
+    <div class="row">
+        <div class="col-12 converter-input">
+            <h4>{ inputTitle() }</h4>
+            <textarea bind:this={ textareaEl } bind:value={input} on:input={ onInputUpdate } on:keydown={ onInputKeyDown }></textarea>
+    
+            {#if method == ConverterMethod.LatinToJava }
+            <div style="margin-block-start: 1em;">
+                <label style="margin-right: .5em;">
+                    <input type="checkbox" role="switch" bind:checked={ isPepetTypeMode }>
+                    Mode Ketik Pepet
+                </label>
+    
+                <label style="margin-right: .5em;">
+                    <input type="checkbox" role="switch" bind:checked={ isIgnoreSpace } on:change={ onInputUpdate }>
+                    Abaikan Spasi
+                </label>
+    
+                <label style="margin-right: .5em;">
+                    <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onInputUpdate }>
+                    Murda
+                </label>
+    
+                <label style="margin-right: .5em;">
+                    <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onInputUpdate }>
+                    Diftong
+                </label>
+            </div>
+            
+            <h5>Tombol Karakter Spesial</h5>
+            <div class="virtual-keyboard">
+                {#each latinToJavaSpecialCharacters as char}
+                <button class="button outline icon-only" on:click= { () => { insertToTextarea(char); onInputUpdate(); } }>{char}</button>
+                {/each}
+            </div>
+            {/if}
+    
+            {#if method == ConverterMethod.JavaToLatin || method == ConverterMethod.JavaToKawi }
+            <div style="margin-block-start: 1em;">
+                <label style="margin-right: .5em;">
+                    <input type="checkbox" role="switch" bind:checked={ isShowVirtualKeyboard }>
+                    Tampilkan Keyboard Aksara Jawa
+                </label>
+            </div>
+                {#if isShowVirtualKeyboard }
+                <div class="virtual-keyboard layout">
+                    {#each javaKeyboardCharacters as char, i}
+                    <button class="button outline icon-only" on:click= { () => { insertToTextarea(char); onInputUpdate(); } }>{char}</button>
+                        {#if i == 12}
+                        <button class="button outline icon-only material-symbols-outlined" style="width: 10%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }>backspace</button>
+                        <br/>
+                        {/if}
+                        {#if i == 25}
+                        <br/>
+                        <button class="button activatable outline icon-only material-symbols-outlined" class:active={ isCapslock } style="width: 10%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>keyboard_capslock</button>
+                        {/if}
+                        {#if i == 36}
+                        <button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } }>keyboard_return</button>
+                        <br/>
+                        {/if}
+                    {/each}
+                    <br/>
+                    <button class="button outline icon-only material-symbols-outlined" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } }>space_bar</button>
+                </div>
+                {/if}
+            {/if}
         </div>
-        
-        <h5>Tombol Karakter Spesial</h5>
-        <div class="virtual-keyboard">
-            {#each latinToJavaSpecialCharacters as char}
-            <button class="button outline icon-only" on:click= { () => insertToTextarea(char) }>{char}</button>
-            {/each}
-        </div>
-        {/if}
-    </div>
-    <div class="col-12 converter-output">
-        <h4>{ outputTitle() }</h4>
-            <div class="content">
-            <span>{ output }</span>
-            <div class="action-button-area">
-                <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip" data-text={ tooltipMessage } on:click={ onClickCopyButton } on:pointerleave={ onPointerLeaveCopyButton }>
-                    <CopyIcon />
-                </button>
+        <div class="col-12 converter-output">
+            <h4>{ outputTitle() }</h4>
+                <div class="content">
+                <span>{ output }</span>
+                <div class="action-button-area">
+                    <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip" data-text={ tooltipMessage } on:click={ onClickCopyButton } on:pointerleave={ onPointerLeaveCopyButton }>
+                        <span class="material-symbols-outlined">content_copy</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

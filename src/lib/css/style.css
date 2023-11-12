@@ -150,6 +150,10 @@ a:hover:not(.button) {
     right: 5px;
 }
 
+.virtual-keyboard {
+    position: relative;
+}
+
 .virtual-keyboard .button {
     margin-left: 0;
     margin-right: 1rem;
@@ -157,6 +161,38 @@ a:hover:not(.button) {
     margin-bottom: 1rem;
     -webkit-margin-end: 1rem;
     margin-block-end: 1rem;
+}
+
+.virtual-keyboard.layout {
+    text-align: center;
+}
+
+.virtual-keyboard.layout .button {
+    display: inline-flex;
+    padding: 0;
+    width: 5%;
+    height: 32px;
+    margin: 3px;
+    align-items: center;
+    justify-content: center;
+    vertical-align: top;
+    -webkit-margin-end: initial;
+    margin-block-end: initial;
+}
+
+.virtual-keyboard.layout .button.activatable::after {
+    content: '';
+    top: 8px;
+    right: 8px;
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--color-lightBrown);
+    border-radius: 50%;
+}
+
+.virtual-keyboard.layout .button.activatable.active::after {
+    background: var(--color-primary);
 }
 
 .tooltip {
