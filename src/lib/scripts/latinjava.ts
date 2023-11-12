@@ -109,7 +109,7 @@ const pada:{ [id: string]: string; } = {
      '-' : '',
 }
 
-function convert(str:string, isMurda:boolean = false, diphthong:boolean = false, withoutSpace:boolean = false):string {
+function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = false, isDiphthong:boolean = false):string {
     var length = str.length;
     var output = [];
     var isMurdaAlreadyIncluded = false;
@@ -397,8 +397,8 @@ function convert(str:string, isMurda:boolean = false, diphthong:boolean = false,
                 output.push(sandhanganSwara[c]);
             }
 
-            // Diphthong
-            if(diphthong && i + 1 < length && isVowels(str[i + 1])) {
+            // isDiphthong
+            if(isDiphthong && i + 1 < length && isVowels(str[i + 1])) {
                 var c2 = str[i + 1];
 
                 if(isVowelsA(c) && isVowelsA(c2)) {
@@ -440,7 +440,7 @@ function convert(str:string, isMurda:boolean = false, diphthong:boolean = false,
         if(isCharactersPada(c)) {
             isAlreadyStacked = false;
 
-            if(withoutSpace && c === ' ') {
+            if(isIgnoreSpace && c === ' ') {
                 continue;
             }
 
