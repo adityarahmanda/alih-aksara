@@ -197,23 +197,7 @@ function onPointerLeaveCopyButton()
             </div>
                 {#if isShowVirtualKeyboard }
                 <div class="virtual-keyboard layout">
-                    {#each javaKeyboardCharacters as char, i}
-                    <button class="button outline icon-only" on:click= { () => { insertToTextarea(char); onInputUpdate(); } }>{char}</button>
-                        {#if i == 12}
-                        <button class="button outline icon-only material-symbols-outlined" style="width: 10%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }>backspace</button>
-                        <br/>
-                        {/if}
-                        {#if i == 25}
-                        <br/>
-                        <button class="button activatable outline icon-only material-symbols-outlined" class:active={ isCapslock } style="width: 10%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>keyboard_capslock</button>
-                        {/if}
-                        {#if i == 36}
-                        <button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } }>keyboard_return</button>
-                        <br/>
-                        {/if}
-                    {/each}
-                    <br/>
-                    <button class="button outline icon-only material-symbols-outlined" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } }>space_bar</button>
+                    {#each javaKeyboardCharacters as char, i}<button class="button outline icon-only" on:click= { () => { insertToTextarea(char); onInputUpdate(); } }>{char}</button>{#if i == 12 || i == 25}<br/>{/if}{#if i == 36}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } }>keyboard_return</button><br/><button class="button activatable outline icon-only material-symbols-outlined" class:active={ isCapslock } style="width: 12%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>keyboard_capslock</button>{/if}{/each}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }>backspace</button><br/><button class="button outline icon-only material-symbols-outlined" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } }>space_bar</button>
                 </div>
                 {/if}
             {/if}

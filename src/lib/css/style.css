@@ -170,9 +170,9 @@ a:hover:not(.button) {
 .virtual-keyboard.layout .button {
     display: inline-flex;
     padding: 0;
-    width: 5%;
+    margin: 0;
+    width: 7.5%;
     height: 32px;
-    margin: 3px;
     align-items: center;
     justify-content: center;
     vertical-align: top;
