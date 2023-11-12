@@ -8,6 +8,8 @@ import CopyIcon from "./CopyIcon.svelte";
 let input:string = "";
 let output:string = "";
 
+let textareaEl:HTMLTextAreaElement;
+let isPepetTypeMode:boolean = true;
 let isIgnoreSpace:boolean = true;
 let isMurda:boolean = false;
 let isDiphtong:boolean = false;
@@ -44,7 +46,7 @@ function outputTitle():string
     return "Aksara Undefined";
 }
 
-function onTextAreaInput()
+function onInputTextarea()
 {
     switch(method) { 
         case ConverterMethod.LatinToJava: 
@@ -63,6 +65,35 @@ function onTextAreaInput()
             break; 
         }
     } 
+}
+
+function onKeyDownTextarea(e:KeyboardEvent) {
+    if(isPepetTypeMode == false) return;
+
+    if(e.shiftKey && e.key === "X") {
+        insertToTextarea("Ê");
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+    }
+
+    if(e.key === "x") {
+        insertToTextarea("ê");
+        e.preventDefault();
+        e.stopPropagation();
+    }
+}
+
+function insertToTextarea(str:string) {
+    // insert character
+    var nextCursorPos = textareaEl.selectionStart + str.length;
+    textareaEl.value = textareaEl.value.substring(0, textareaEl.selectionStart) + str + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
+    
+    // move cursor
+    textareaEl.focus();
+    setTimeout(() => {
+        textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
+    }, 10);
 }
 
 function copyToClipboard(text:string) {
@@ -90,27 +121,27 @@ function onPointerLeaveCopyButton()
 <section class="row converter">
     <div class="col converter-input">
         <h4>{ inputTitle() }</h4>
-        <textarea bind:value={input} on:input={ onTextAreaInput }></textarea>
+        <textarea bind:this={ textareaEl } bind:value={input} on:input={ onInputTextarea } on:keydown={ onKeyDownTextarea }></textarea>
 
         {#if method == ConverterMethod.LatinToJava }
         <div class="converter-input-togglers" style="margin-block-start: 1em;">
             <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" checked>
+                <input type="checkbox" role="switch" bind:checked={ isPepetTypeMode }>
                 Mode Ketik Pepet
             </label>
 
             <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" bind:checked={ isIgnoreSpace } on:change={ onTextAreaInput }>
+                <input type="checkbox" role="switch" bind:checked={ isIgnoreSpace } on:change={ onInputTextarea }>
                 Abaikan Spasi
             </label>
 
             <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onTextAreaInput }>
+                <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onInputTextarea }>
                 Murda
             </label>
 
             <label style="margin-right: .5em;">
-                <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onTextAreaInput }>
+                <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onInputTextarea }>
                 Diftong
             </label>
         </div>
