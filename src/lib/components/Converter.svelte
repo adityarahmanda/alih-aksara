@@ -13,6 +13,7 @@ let isPepetTypeMode:boolean = true;
 let isIgnoreSpace:boolean = true;
 let isMurda:boolean = false;
 let isDiphtong:boolean = false;
+let latinToJavaSpecialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
 
 let tooltipEl:HTMLElement;
 let tooltipMessage:string = "";
@@ -68,6 +69,7 @@ function onInputTextarea()
 }
 
 function onKeyDownTextarea(e:KeyboardEvent) {
+    if (method != ConverterMethod.LatinToJava) return;
     if(isPepetTypeMode == false) return;
 
     if(e.shiftKey && e.key === "X") {
@@ -119,12 +121,12 @@ function onPointerLeaveCopyButton()
 </script>
 
 <section class="row converter">
-    <div class="col converter-input">
+    <div class="col-12 converter-input">
         <h4>{ inputTitle() }</h4>
         <textarea bind:this={ textareaEl } bind:value={input} on:input={ onInputTextarea } on:keydown={ onKeyDownTextarea }></textarea>
 
         {#if method == ConverterMethod.LatinToJava }
-        <div class="converter-input-togglers" style="margin-block-start: 1em;">
+        <div style="margin-block-start: 1em;">
             <label style="margin-right: .5em;">
                 <input type="checkbox" role="switch" bind:checked={ isPepetTypeMode }>
                 Mode Ketik Pepet
@@ -145,9 +147,16 @@ function onPointerLeaveCopyButton()
                 Diftong
             </label>
         </div>
+        
+        <h5>Tombol Karakter Spesial</h5>
+        <div class="virtual-keyboard">
+            {#each latinToJavaSpecialCharacters as char}
+            <button class="button outline icon-only" on:click= { () => insertToTextarea(char) }>{char}</button>
+            {/each}
+        </div>
         {/if}
     </div>
-    <div class="col converter-output">
+    <div class="col-12 converter-output">
         <h4>{ outputTitle() }</h4>
             <div class="content">
             <span>{ output }</span>
@@ -167,8 +176,8 @@ function onPointerLeaveCopyButton()
         <ul class="list-unstyled">
             <li>
                 <h5>Mode Ketik Pepet</h5>
-                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê sebagai representasi Sandhangan Pepet (ꦼ) dalam aksara jawa.</p>
-                <p>Dalam bahasa Indonesia, karakter ê menghasilkan bunyi seperti huruf e pada kata "enam".</p>
+                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan ꦼ (Pepet) dalam aksara jawa. 
+                Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
             </li>
             <li>
                 <h5>Abaikan Spasi</h5>
@@ -176,8 +185,8 @@ function onPointerLeaveCopyButton()
             </li>
             <li>
                 <h5>Murda</h5>
-                <p>Saat diaktifkan, aksara pertama dari aksara-aksara ꦤ, ꦏ, ꦠ, ꦱ, ꦥ, ꦘ, ꦒ, ꦧ akan diubah ke dalam bentuk aksara murda-nya ꦟ, ꦑ, ꦡ, ꦯ, ꦦ, ꦟ, ꦓ, ꦨ.</p>
-                <p>Dalam aksara jawa, aksara murda digunakan layaknya huruf kapital dalam bahasa Indonesia dan dipakai khusus untuk penulisan nama, gelar, atau tempat.</p>
+                <p>Saat diaktifkan, aksara pertama dari aksara-aksara ꦤ, ꦏ, ꦠ, ꦱ, ꦥ, ꦘ, ꦒ, ꦧ akan diubah ke dalam bentuk aksara murda-nya ꦟ, ꦑ, ꦡ, ꦯ, ꦦ, ꦟ, ꦓ, ꦨ.
+                Dalam aksara jawa, aksara murda digunakan layaknya huruf kapital dalam bahasa Indonesia dan dipakai khusus untuk penulisan nama, gelar, atau tempat.</p>
             </li>
             <li>
                 <h5>Diftong</h5>
@@ -203,7 +212,7 @@ function onPointerLeaveCopyButton()
                     <li>ñ menghasilkan ꦚ (Nya)</li>
                     <li>ŋ menghasilkan ꦔ (Nga)</li> 
                 </ul>
-                <p><strong>PS:</strong> karakter spesial ñ dan ŋ sama dengan ny dan ng dalam bahasa indonesia</p>
+                <p>Karakter spesial ñ dan ŋ sama dengan ny dan ng dalam bahasa indonesia</p>
             </li>
         </ul>
     </div>

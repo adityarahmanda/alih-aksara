@@ -128,10 +128,6 @@ a:hover:not(.button) {
     list-style: none;
 }
 
-.converter-input, .converter-output {
-    max-width: calc(50% - var(--grid-gutter));
-}
-
 .converter-input textarea, .converter-output .content {
     position: relative;
     padding: var(--converter-padding-y) var(--converter-padding-x);
@@ -152,6 +148,15 @@ a:hover:not(.button) {
     position: absolute;
     bottom: 5px;
     right: 5px;
+}
+
+.virtual-keyboard .button {
+    margin-left: 0;
+    margin-right: 1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    -webkit-margin-end: 1rem;
+    margin-block-end: 1rem;
 }
 
 .tooltip {
@@ -188,4 +193,10 @@ a:hover:not(.button) {
     border:5px solid #000;
     border-color: transparent transparent transparent black;
     display:none;
+}
+
+@media screen and (min-width: 900px) {
+    .converter-input, .converter-output {
+        max-width: calc(50% - var(--grid-gutter));
+    }
 }
