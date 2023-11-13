@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"postbuild": "npx svelte-sitemap --domain https://adityarahmanda.github.io/alih-aksara",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
@@ -26,6 +27,7 @@
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
 		"svelte-seo": "^1.5.4",
+		"svelte-sitemap": "^2.6.0",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2"
 	},
