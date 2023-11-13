@@ -3,6 +3,7 @@ import { ConverterMethod } from "$lib/scripts/global";
 import { convert as latinJavaConvert } from "$lib/scripts/latinjava";
 import { convert as javaLatinConvert } from "$lib/scripts/javalatin";
 import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
+import { javaDefaultKeyboard, javaCapslockKeyboard } from "$lib/scripts/javakeyboard";
 
 let input:string = "";
 let output:string = "";
@@ -12,13 +13,19 @@ let isPepetTypeMode:boolean = true;
 let isIgnoreSpace:boolean = true;
 let isMurda:boolean = false;
 let isDiphtong:boolean = false;
-let isShowVirtualKeyboard:boolean = false;
+let isVirtualKeyboardActive:boolean = false;
 let isCapslock:boolean = false;
 
 const latinToJavaSpecialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
-const javaDefaultKeyboardCharacters = ['꧇','꧑','꧒','꧓','꧔','꧕','꧖','꧗','꧘','꧙','꧐','꦳','ꦀ','꧀','ꦮ','ꦺ','ꦫ','ꦠ','ꦪ','ꦸ','ꦶ','ꦺꦴ','ꦥ','ꦁ','ꦂ','︀','ꦔ','ꦱ','ꦢ','ꦉ','ꦒ','ꦲ','ꦗ','ꦏ','ꦭ','ꦝ','ꦛ','ꦚ','ꦼ','ꦕ','ꦊ','ꦧ','ꦤ','ꦩ','꧈','꧉','꧋'];
-const javaCapslockKeyboardCharacters = ['꧊','ꦵ','ꧏ','꧆','꧞','꧟','꧃','꧄','꧅','꧌','꧍','ꦷ','ꦙ','ꦐ','ꦻ','ꦌ','ꦿ','ꦡ','ꦾ','ꦈ','ꦆ','ꦎ','ꦦ','꧁','꧂','​','ꦄ','ꦯ','ꦣ','ꦽ','ꦓ','ꦃ','ꦘ','ꦑ','ꦴ','ꦞ','ꦜ','ꦰ','ꦬ','ꦖ','ꦋ','ꦨ','ꦟ','ꦍ','ꦹ','ꦅ','ꦇ'];
-let javaKeyboardCharacters = isCapslock ? javaCapslockKeyboardCharacters : javaDefaultKeyboardCharacters;
+let javaKeyboard = isCapslock ? javaDefaultKeyboard : javaCapslockKeyboard;
+var javaKeyboardDictionary:{ [id: string]: string; } = { };
+javaDefaultKeyboard.forEach(x => {
+    javaKeyboardDictionary[x[0]] = x[1];
+});
+javaCapslockKeyboard.forEach(x => {
+    javaKeyboardDictionary[x[0]] = x[1];
+});
+
 
 let tooltipEl:HTMLElement;
 let tooltipMessage:string = "";
@@ -74,30 +81,75 @@ function onInputUpdate()
 }
 
 function onInputKeyDown(e:KeyboardEvent) {
-    if (method != ConverterMethod.LatinToJava) return;
-    if(isPepetTypeMode == false) return;
+    if (method == ConverterMethod.LatinToJava) 
+    {
+        if(isPepetTypeMode == false) return;
 
-    if(e.shiftKey && e.key === "X") {
-        insertToTextarea("Ê");
-        e.preventDefault();
-        e.stopPropagation();
+        if(e.shiftKey && e.key === "X") {
+            insertToTextarea("Ê");
+            onInputUpdate();
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+
+        if(e.key === "x") {
+            insertToTextarea("ê");
+            onInputUpdate();
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
         return;
     }
 
-    if(e.key === "x") {
-        insertToTextarea("ê");
-        e.preventDefault();
-        e.stopPropagation();
+    if (method == ConverterMethod.JavaToLatin || method == ConverterMethod.JavaToKawi) 
+    {
+        if(isVirtualKeyboardActive == false) return;
+
+        isCapslock = e.getModifierState("CapsLock");
+        javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
+
+        if (e.key == "Control") return;
+
+        if (javaKeyboardDictionary.hasOwnProperty(e.key))
+        {
+            insertToTextarea(javaKeyboardDictionary[e.key]);
+            onInputUpdate();
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        return;
+    }
+}
+
+function onDocumentKeyDown(e:KeyboardEvent) {
+    if (e.key == "CapsLock")
+    {
+        isCapslock = e.getModifierState("CapsLock");
+        javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
+    }
+
+    if (e.key == "Shift")
+    {
+        isCapslock = e.getModifierState("CapsLock") ? !e.getModifierState("Shift") : e.getModifierState("Shift");
+        javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
+    }
+}
+
+function onDocumentKeyUp(e:KeyboardEvent) {
+    if (e.key == "Shift")
+    {
+        isCapslock = e.getModifierState("CapsLock") ? !e.getModifierState("Shift") : e.getModifierState("Shift");
+        javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
     }
 }
 
 function insertToTextarea(str:string) {
-    // insert character
     var nextCursorPos = textareaEl.selectionStart + str.length;
     textareaEl.value = textareaEl.value.substring(0, textareaEl.selectionStart) + str + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
     input = textareaEl.value;
-
-    // move cursor
     textareaEl.focus();
     textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
 }
@@ -122,7 +174,9 @@ function onPressBackspace() {
 function toggleCapslock()
 {
     isCapslock = !isCapslock;
-    javaKeyboardCharacters = isCapslock ? javaCapslockKeyboardCharacters : javaDefaultKeyboardCharacters;
+    javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
+    textareaEl.focus();
+    textareaEl.setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd);
 }
 
 function copyToClipboard(text:string) {
@@ -150,6 +204,8 @@ function onPointerLeaveCopyButton()
 <svelte:head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </svelte:head>
+
+<svelte:document on:keydown={ onDocumentKeyDown } on:keyup={ onDocumentKeyUp } />
 
 <section class="converter">
     <div class="row">
@@ -191,13 +247,13 @@ function onPointerLeaveCopyButton()
             {#if method == ConverterMethod.JavaToLatin || method == ConverterMethod.JavaToKawi }
             <div style="margin-block-start: 1em;">
                 <label style="margin-right: .5em;">
-                    <input type="checkbox" role="switch" bind:checked={ isShowVirtualKeyboard }>
-                    Tampilkan Keyboard Aksara Jawa
+                    <input type="checkbox" role="switch" bind:checked={ isVirtualKeyboardActive }>
+                    Aktifkan Keyboard Virtual Aksara Jawa
                 </label>
             </div>
-                {#if isShowVirtualKeyboard }
+                {#if isVirtualKeyboardActive }
                 <div class="virtual-keyboard layout">
-                    {#each javaKeyboardCharacters as char, i}<button class="button outline icon-only" on:click= { () => { insertToTextarea(char); onInputUpdate(); } }>{char}</button>{#if i == 12 || i == 25}<br/>{/if}{#if i == 36}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } }>keyboard_return</button><br/><button class="button activatable outline icon-only material-symbols-outlined" class:active={ isCapslock } style="width: 12%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>keyboard_capslock</button>{/if}{/each}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }>backspace</button><br/><button class="button outline icon-only material-symbols-outlined" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } }>space_bar</button>
+                    {#each javaKeyboard as key, i}<button class="button outline icon-only" on:click= { () => { insertToTextarea(key[1]); onInputUpdate(); } }>{key[1]}</button>{#if i == 12 || i == 25}<br/>{/if}{#if i == 36}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } }>keyboard_return</button><br/><button class="button activatable outline icon-only material-symbols-outlined" class:active={ isCapslock } style="width: 12%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>keyboard_capslock</button>{/if}{/each}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }>backspace</button><br/><button class="button outline icon-only material-symbols-outlined" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } }>space_bar</button>
                 </div>
                 {/if}
             {/if}
