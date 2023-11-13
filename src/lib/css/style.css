@@ -17,7 +17,7 @@ html, body {
 main {
     display: flex;
     flex-flow: column;
-    height: 100%;
+    min-height: 100%;
 }
 
 main section {

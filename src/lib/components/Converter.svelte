@@ -81,11 +81,13 @@ function onInputUpdate()
 }
 
 function onInputKeyDown(e:KeyboardEvent) {
+    if (e.ctrlKey) return;
+
     if (method == ConverterMethod.LatinToJava) 
     {
         if(isPepetTypeMode == false) return;
 
-        if(e.shiftKey && e.key === "X") {
+        if(e.key === "X") {
             insertToTextarea("Ê");
             onInputUpdate();
             e.preventDefault();
@@ -109,8 +111,6 @@ function onInputKeyDown(e:KeyboardEvent) {
 
         isCapslock = e.getModifierState("CapsLock");
         javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
-
-        if (e.key == "Control") return;
 
         if (javaKeyboardDictionary.hasOwnProperty(e.key))
         {
