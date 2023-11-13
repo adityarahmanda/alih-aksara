@@ -17,7 +17,7 @@ let isVirtualKeyboardActive:boolean = false;
 let isCapslock:boolean = false;
 
 const latinToJavaSpecialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
-let javaKeyboard = isCapslock ? javaDefaultKeyboard : javaCapslockKeyboard;
+let javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
 var javaKeyboardDictionary:{ [id: string]: string; } = { };
 javaDefaultKeyboard.forEach(x => {
     javaKeyboardDictionary[x[0]] = x[1];
