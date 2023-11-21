@@ -1,8 +1,8 @@
 <script lang="ts">
-    import '$lib/css/chota.min.css';
-    import '$lib/css/style.css';
-    import SvelteSeo from "svelte-seo";
-    import { base } from '$app/paths';
+import '$lib/css/chota.min.css';
+import '$lib/css/style.css';
+import SvelteSeo from "svelte-seo";
+import { base } from '$app/paths';
 </script>
 
 <SvelteSeo
@@ -10,6 +10,22 @@
   description="Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya."
   canonical="https://adityarahmanda.github.io/alih-aksara"
   keywords="alat, transliterasi, konversi, alih, aksara, jawa, latin, kawi"
+  openGraph={{
+    title: "Alih Aksara",
+    description: "Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya.",
+    url: "https://adityarahmanda.github.io/alih-aksara",
+    type: "website",
+    images: [{
+        url: "https://adityarahmanda.github.io/alih-aksara/alih-aksara-screenshot.png",
+      },],
+    site_name: "Alih Aksara",
+  }}
+  twitter={{
+    card: "summary_large_image",
+    title: "Alih Aksara",
+    description: "Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya.",
+    image: "https://adityarahmanda.github.io/alih-aksara/alih-aksara-screenshot.png",
+  }}
 />
 
 <section>
@@ -21,9 +37,9 @@
     </div>
     <div class="col illustration-image">
       <picture>
-        <source type="image/webp" media="(min-width:900px)" width="420" srcset="illustration.webp">
-        <source type="image/webp" width="360" srcset="illustration.webp">
-        <img src="illustration.png"  alt="Illustration">
+        <source type="image/webp" media="(min-width:900px)" width="420" srcset="{ base }/illustration.webp">
+        <source type="image/webp" width="360" srcset="{ base }/illustration.webp">
+        <img src="{ base }illustration.png"  alt="Illustration">
       </picture>
     </div>
   </div>
