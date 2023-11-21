@@ -39,7 +39,7 @@ import { base } from '$app/paths';
       <picture>
         <source type="image/webp" media="(min-width:900px)" width="420" srcset="{ base }/illustration.webp">
         <source type="image/webp" width="360" srcset="{ base }/illustration.webp">
-        <img src="{ base }illustration.png"  alt="Illustration">
+        <img src="{ base }/illustration.png"  alt="Illustration">
       </picture>
     </div>
   </div>
