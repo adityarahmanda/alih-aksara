@@ -56,6 +56,7 @@ jobs:
         uses: actions/deploy-pages@v2
 
   ping:
+    needs: deploy
     name: Ping Google
     runs-on: ubuntu-latest
 
