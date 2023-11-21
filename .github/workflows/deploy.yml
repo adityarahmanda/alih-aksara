@@ -54,3 +54,11 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v2
+
+  ping:
+    name: Ping Google
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send HTTP GET request
+        run: curl http://www.google.com/ping?sitemap=https://adityarahmanda.github.io/alih-aksara/sitemap.xml
