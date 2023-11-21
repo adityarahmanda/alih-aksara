@@ -20,6 +20,6 @@
     <slot />
 
     <footer class="text-center">
-        <h5>©2021 - <a href="https://adityarahmanda.github.io" class="copyright">Aditya Rahmanda</a></h5>
+        <h5>©2021 - <a href="https://adityarahmanda.github.io" class="copyright" style="text-decoration: underline;">Aditya Rahmanda</a></h5>
     </footer>
 </main>

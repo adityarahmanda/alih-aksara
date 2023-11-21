@@ -128,6 +128,15 @@ a:hover:not(.button) {
     list-style: none;
 }
 
+.hero {
+    margin-top: 4em; 
+    margin-bottom: 4em;
+}
+
+.hero .illustration-image {
+    text-align: right;
+}
+
 .converter-input textarea, .converter-output .content {
     position: relative;
     padding: var(--converter-padding-y) var(--converter-padding-x);
@@ -234,5 +243,17 @@ a:hover:not(.button) {
 @media screen and (min-width: 900px) {
     .converter-input, .converter-output {
         max-width: calc(50% - var(--grid-gutter));
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .hero {
+        flex-direction: column-reverse;
+        margin-top: 2em; 
+        margin-bottom: 2em;
+    }
+    
+    .hero .illustration-image {
+        text-align: center;
     }
 }

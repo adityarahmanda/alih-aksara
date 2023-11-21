@@ -7,7 +7,7 @@ import Converter from "$lib/components/Converter.svelte";
     
 <SvelteSeo
     title="Alih Aksara | Jawa-Kawi"
-    description="Alat transliterasi sederhana untuk membantu kalian untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa menjadi aksara Kawi."
+    description="Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa menjadi aksara Kawi."
     canonical="https://adityarahmanda.github.io/alih-aksara/jawa-kawi"
     keywords="alat, transliterasi, konversi, alih, aksara, jawa, kawi"
 />

@@ -7,7 +7,7 @@
         
 <SvelteSeo
     title="Alih Aksara | Jawa-Latin"
-    description="Alat transliterasi sederhana untuk membantu kalian untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa menjadi aksara Latin."
+    description="Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa menjadi aksara Latin."
     canonical="https://adityarahmanda.github.io/alih-aksara/jawa-latin"
     keywords="alat, transliterasi, konversi, alih, aksara, jawa, latin"
 />
