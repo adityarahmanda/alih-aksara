@@ -5,6 +5,8 @@ import { convert as latinKawiConvert } from "$lib/scripts/latinkawi";
 import { convert as javaLatinConvert } from "$lib/scripts/javalatin";
 import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
 import { javaDefaultKeyboard, javaCapslockKeyboard } from "$lib/scripts/javakeyboard";
+	import WidgetFeedback from "./WidgetFeedback.svelte";
+	import WidgetRecomendation from "./WidgetRecomendation.svelte";
 
 let input:string = "";
 let output:string = "";
@@ -289,8 +291,12 @@ function onPointerLeaveCopyButton()
         <ul class="list-unstyled">
             <li>
                 <h5>Mode Ketik Pepet</h5>
-                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan ꦼ (Pepet) dalam aksara jawa. 
-                Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
+                {#if method == ConverterMethod.LatinToJava }
+                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan pepet (ꦼ) dalam aksara Jawa. Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
+                {/if}
+                {#if method == ConverterMethod.LatinToKawi}
+                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan pepet (𑽀◌) dalam aksara Kawi. Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
+                {/if}
             </li>
             <li>
                 <h5>Abaikan Spasi</h5>
@@ -330,10 +336,17 @@ function onPointerLeaveCopyButton()
             </li>
             {/if}
             {#if method == ConverterMethod.LatinToKawi }
-            <h5>Tombol Karakter Spesial</h5>
-            <p>Berisikan tombol-tombol untuk mengetikkan karakter-karakter spesial yang digunakan untuk merepresentasikan huruf-huruf aksara kawi yang tidak dapat diwakili oleh alfabet A-Z.</p>
+            <li>
+                <h5>Tombol Karakter Spesial</h5>
+                <p>Berisikan tombol-tombol untuk mengetikkan karakter-karakter spesial yang digunakan untuk merepresentasikan huruf-huruf aksara kawi yang tidak dapat diwakili oleh alfabet A-Z.</p>
+            </li>
             {/if}
         </ul>
     </div>
 </section>
 {/if}
+
+<section class="row" style="flex: 1 1 auto;">
+    <WidgetRecomendation class="col-6" />
+    <WidgetFeedback class="col-6" />
+</section>

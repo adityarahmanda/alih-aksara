@@ -3,6 +3,8 @@ import '$lib/css/chota.min.css';
 import '$lib/css/style.css';
 import SvelteSeo from "svelte-seo";
 import { base } from '$app/paths';
+	import WidgetFeedback from '$lib/components/WidgetFeedback.svelte';
+	import WidgetRecomendation from '$lib/components/WidgetRecomendation.svelte';
 </script>
 
 <SvelteSeo
@@ -51,21 +53,8 @@ import { base } from '$app/paths';
       <p>Oleh karena itu, saya yang masih awam ini dengan tangan terbuka menerima segala umpan balik untuk mengembangkan website ini menjadi lebih baik.</p>
     </div>
     <div class="col">
-      <div style="margin-bottom: 2em">
-        <h4>Umpan Balik</h4>
-        <span>Kirimkan saja melalui <a href="mailto: arahmanda21@gmail.com" style="text-decoration: underline;">Email</a> ini</span>
-      </div>
-      <div>
-        <h4>Mungkin kamu juga tertarik</h4>
-        <ul class="list-unstyled">
-          <li style="margin-bottom: .5em">
-            <a href="https://adityarahmanda.github.io/macaksara/" style="text-decoration: underline;">Macaksara - Website Permainan Kuis Aksara Jawa</a>
-          </li>
-          <li style="margin-bottom: .5em">
-            <a href="https://adityarahmanda.github.io/artikel/belajar-aksara-jawa" style="text-decoration: underline;">Belajar Aksara Jawa Lengkap Beserta Contohnya</a>
-          </li>
-        </ul>
-      </div>
+      <WidgetRecomendation style="margin-bottom: 2em" />
+      <WidgetFeedback  />
     </div>
   </div>
 
