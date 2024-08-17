@@ -13,6 +13,7 @@
         <div class="nav-right">
             <a href="{ base }/latin-jawa">Latin-Jawa</a>
             <a href="{ base }/jawa-latin">Jawa-Latin</a>
+            <a href="{ base }/latin-kawi">Latin-Kawi</a>
             <a href="{ base }/jawa-kawi">Jawa-Kawi</a>
         </div>
     </nav>

@@ -21,7 +21,7 @@ import Converter from "$lib/components/Converter.svelte";
       }}
       twitter={{
         card: "summary_large_image",
-        title: "Alih Aksara",
+        title: "Alih Aksara | Jawa-Kawi",
         description: "Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa menjadi aksara Kawi.",
         image: "https://adityarahmanda.github.io/alih-aksara/alih-aksara-screenshot.png",
       }}

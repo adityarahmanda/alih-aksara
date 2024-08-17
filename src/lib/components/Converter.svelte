@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ConverterMethod } from "$lib/scripts/global";
 import { convert as latinJavaConvert } from "$lib/scripts/latinjava";
+import { convert as latinKawiConvert } from "$lib/scripts/latinkawi";
 import { convert as javaLatinConvert } from "$lib/scripts/javalatin";
 import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
 import { javaDefaultKeyboard, javaCapslockKeyboard } from "$lib/scripts/javakeyboard";
@@ -16,7 +17,7 @@ let isDiphtong:boolean = false;
 let isVirtualKeyboardActive:boolean = false;
 let isCapslock:boolean = false;
 
-const latinToJavaSpecialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
+const specialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
 let javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
 var javaKeyboardDictionary:{ [id: string]: string; } = { };
 javaDefaultKeyboard.forEach(x => {
@@ -36,6 +37,7 @@ function inputTitle():string
 {
     switch(method) { 
         case ConverterMethod.LatinToJava:
+        case ConverterMethod.LatinToKawi:
             return "Aksara Latin"
         case ConverterMethod.JavaToKawi: 
         case ConverterMethod.JavaToLatin: 
@@ -53,6 +55,7 @@ function outputTitle():string
         case ConverterMethod.JavaToLatin: 
             return "Aksara Latin";
         case ConverterMethod.JavaToKawi:
+        case ConverterMethod.LatinToKawi:
             return "Aksara Kawi";
     }
 
@@ -65,6 +68,11 @@ function onInputUpdate()
         case ConverterMethod.LatinToJava: 
         { 
             output = latinJavaConvert(input, isIgnoreSpace, isMurda, isDiphtong);
+            break; 
+        }
+        case ConverterMethod.LatinToKawi: 
+        { 
+            output = latinKawiConvert(input, isIgnoreSpace);
             break; 
         }
         case ConverterMethod.JavaToLatin: 
@@ -83,7 +91,7 @@ function onInputUpdate()
 function onInputKeyDown(e:KeyboardEvent) {
     if (e.ctrlKey) return;
 
-    if (method == ConverterMethod.LatinToJava) 
+    if (method == ConverterMethod.LatinToJava || method == ConverterMethod.LatinToKawi) 
     {
         if(isPepetTypeMode == false) return;
 
@@ -213,7 +221,7 @@ function onPointerLeaveCopyButton()
             <h4>{ inputTitle() }</h4>
             <textarea bind:this={ textareaEl } bind:value={input} on:input={ onInputUpdate } on:keydown={ onInputKeyDown }></textarea>
     
-            {#if method == ConverterMethod.LatinToJava }
+            {#if method == ConverterMethod.LatinToJava || method == ConverterMethod.LatinToKawi }
             <div style="margin-block-start: 1em;">
                 <label style="margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isPepetTypeMode }>
@@ -225,6 +233,7 @@ function onPointerLeaveCopyButton()
                     Abaikan Spasi
                 </label>
     
+                {#if method == ConverterMethod.LatinToJava }
                 <label style="margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onInputUpdate }>
                     Murda
@@ -234,11 +243,12 @@ function onPointerLeaveCopyButton()
                     <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onInputUpdate }>
                     Diftong
                 </label>
+                {/if}
             </div>
             
             <h5>Tombol Karakter Spesial</h5>
             <div class="virtual-keyboard">
-                {#each latinToJavaSpecialCharacters as char}
+                {#each specialCharacters as char}
                 <button class="button outline icon-only" on:click= { () => { insertToTextarea(char); onInputUpdate(); } }>{char}</button>
                 {/each}
             </div>
@@ -272,7 +282,7 @@ function onPointerLeaveCopyButton()
     </div>
 </section>
 
-{#if method == ConverterMethod.LatinToJava }
+{#if method == ConverterMethod.LatinToJava || method == ConverterMethod.LatinToKawi}
 <section class="row">
     <div class="col">
         <h4>Keterangan Penggunaan</h4>
@@ -286,6 +296,7 @@ function onPointerLeaveCopyButton()
                 <h5>Abaikan Spasi</h5>
                 <p>Saat diaktifkan, proses konversi akan mengabaikan spasi dari kolom masukan. Sebaliknya jika dinonaktifkan, spasi akan dikonversikan menjadi <i>zero width space</i> alias spasi yang tidak terlihat.</p>                
             </li>
+            {#if method == ConverterMethod.LatinToJava }
             <li>
                 <h5>Murda</h5>
                 <p>Saat diaktifkan, aksara pertama dari aksara-aksara ꦤ, ꦏ, ꦠ, ꦱ, ꦥ, ꦘ, ꦒ, ꦧ akan diubah ke dalam bentuk aksara murda-nya ꦟ, ꦑ, ꦡ, ꦯ, ꦦ, ꦟ, ꦓ, ꦨ.
@@ -317,6 +328,11 @@ function onPointerLeaveCopyButton()
                 </ul>
                 <p>Karakter spesial ñ dan ŋ sama dengan ny dan ng dalam bahasa indonesia</p>
             </li>
+            {/if}
+            {#if method == ConverterMethod.LatinToKawi }
+            <h5>Tombol Karakter Spesial</h5>
+            <p>Berisikan tombol-tombol untuk mengetikkan karakter-karakter spesial yang digunakan untuk merepresentasikan huruf-huruf aksara kawi yang tidak dapat diwakili oleh alfabet A-Z.</p>
+            {/if}
         </ul>
     </div>
 </section>
