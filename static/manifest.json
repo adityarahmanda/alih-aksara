@@ -1,0 +1,40 @@
+{
+    "name": "Alih Aksara - Alat transliterasi sederhana aksara Jawa dan aksara lainnya.",
+    "short_name": "Alih Aksara",
+    "description": "Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya.",
+    "start_url": "/latin-jawa",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#47311c",
+    "icons": [
+        {
+            "src": "icon-64x64.png",
+            "type": "image/png",
+            "sizes": "64x64"
+        },
+        {
+            "src": "icon-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "icon-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshot-narrow.png",
+            "type": "image/jpg",
+            "sizes": "370x730",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "/screenshot.png",
+            "type": "image/jpg",
+            "sizes": "720x370",
+            "form_factor": "wide"
+        }
+    ]
+}

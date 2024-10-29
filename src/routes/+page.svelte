@@ -8,7 +8,7 @@ import { base } from '$app/paths';
 </script>
 
 <SvelteSeo
-  title="Alih Aksara"
+  title="Alih Aksara - Alat transliterasi sederhana aksara Jawa dan aksara lainnya."
   description="Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya."
   canonical="https://adityarahmanda.github.io/alih-aksara"
   keywords="alat, transliterasi, konversi, alih, aksara, jawa, latin, kawi"
@@ -18,7 +18,7 @@ import { base } from '$app/paths';
     url: "https://adityarahmanda.github.io/alih-aksara",
     type: "website",
     images: [{
-        url: "https://adityarahmanda.github.io/alih-aksara/alih-aksara-screenshot.png",
+        url: "https://adityarahmanda.github.io/alih-aksara/screenshot.png",
       },],
     site_name: "Alih Aksara",
   }}
@@ -26,7 +26,7 @@ import { base } from '$app/paths';
     card: "summary_large_image",
     title: "Alih Aksara",
     description: "Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya.",
-    image: "https://adityarahmanda.github.io/alih-aksara/alih-aksara-screenshot.png",
+    image: "https://adityarahmanda.github.io/alih-aksara/screenshot.png",
   }}
 />
 

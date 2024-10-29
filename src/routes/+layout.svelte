@@ -3,6 +3,24 @@
     import '$lib/css/chota.min.css';
     import '$lib/css/style.css';
     import { base } from '$app/paths';
+	import { onMount } from 'svelte';
+
+    async function detectServiceWorkerUpdate() {
+        const registration = await navigator.serviceWorker.ready;
+
+        registration.addEventListener('updatefound', () => {
+            const newServiceWorker = registration.installing;
+            newServiceWorker?.addEventListener('statechange', () => {
+                if (newServiceWorker.state == 'installed') {
+                    newServiceWorker.postMessage({ type: 'SKIP_WAITING' });
+                }
+            })
+        })
+    }
+
+    onMount(() => {
+        detectServiceWorkerUpdate()
+    });
 </script>
 
 <main class="container">

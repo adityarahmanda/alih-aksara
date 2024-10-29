@@ -15,7 +15,7 @@ import Converter from "$lib/components/Converter.svelte";
         url: "https://adityarahmanda.github.io/alih-aksara/jawa-latin",
         type: "website",
         images: [{
-            url: "https://adityarahmanda.github.io/alih-aksara/alih-aksara-screenshot.png",
+            url: "https://adityarahmanda.github.io/alih-aksara/screenshot.png",
           },],
         site_name: "Alih Aksara",
       }}
@@ -23,7 +23,7 @@ import Converter from "$lib/components/Converter.svelte";
         card: "summary_large_image",
         title: "Alih Aksara | Jawa-Latin",
         description: "Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa menjadi aksara Latin.",
-        image: "https://adityarahmanda.github.io/alih-aksara/alih-aksara-screenshot.png",
+        image: "https://adityarahmanda.github.io/alih-aksara/screenshot.png",
       }}
 />
     
