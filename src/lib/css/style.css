@@ -1,5 +1,6 @@
 :root {
     --color-primary: #47311c;
+    --color-secondary: #47311c;
     --color-lightBrown: #ebe7e3;
     --font-family-sans: "Mulish","Noto Sans Kawi","Noto Sans Javanese",sans-serif;
     --converter-font-size: 1.6rem;
@@ -234,6 +235,28 @@ a:hover:not(.button) {
     border:5px solid #000;
     border-color: transparent transparent transparent black;
     display:none;
+}
+
+.pwa-toast {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform:translateX(-50%);
+    margin-bottom: 1.2rem;
+    padding: 1rem;
+    border: 1px solid var(--color-lightGrey);
+    border-radius:5px;
+    z-index: 2;
+    text-align: left;
+    background-color: white;
+    width: max-content;
+}
+
+.pwa-toast button {
+    margin-right:0;
+    margin-left:.5rem !important;
+    border-radius:5px;
+    padding:0.8rem 1rem;
 }
 
 @media screen and (min-width: 900px) {

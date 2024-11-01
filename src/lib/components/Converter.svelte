@@ -5,8 +5,8 @@ import { convert as latinKawiConvert } from "$lib/scripts/latinkawi";
 import { convert as javaLatinConvert } from "$lib/scripts/javalatin";
 import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
 import { javaDefaultKeyboard, javaCapslockKeyboard } from "$lib/scripts/javakeyboard";
-	import WidgetFeedback from "./WidgetFeedback.svelte";
-	import WidgetRecomendation from "./WidgetRecomendation.svelte";
+import WidgetFeedback from "./WidgetFeedback.svelte";
+import WidgetRecomendation from "./WidgetRecomendation.svelte";
 
 let input:string = "";
 let output:string = "";
@@ -210,10 +210,6 @@ function onPointerLeaveCopyButton()
     tooltipEl.classList.remove("show");
 }
 </script>
-
-<svelte:head>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-</svelte:head>
 
 <svelte:document on:keydown={ onDocumentKeyDown } on:keyup={ onDocumentKeyUp } />
 

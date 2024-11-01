@@ -8,10 +8,29 @@ declare let self: ServiceWorkerGlobalScope;
 // Create a unique cache name for this deployment
 const CACHE = `cache-${version}`;
 
+const addDomain = (assets: string[]) => assets.map((f) => self.location.origin + f);
+
+// hard-coded list of app routes we want to preemptively cache
+const routes = [
+	"/",
+	"/jawa-kawi",
+	"/jawa-latin",
+	"/latin-jawa",
+	"/latin-kawi",
+];
+
+// hard-coded list of other assets necessary for page load outside our domain
+const customAssets = [
+  "https://fonts.googleapis.com/css2?family=Mulish:wght@400;900&family=Noto+Sans+Javanese&family=Noto+Sans+Kawi&display=swap",
+  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+];
+
 // preload the code and data needed to navigate to /foo
 const ASSETS = [
 	...build, // the app itself
-	...files  // everything in `static`
+	...files,  // everything in `static`
+	...addDomain(routes),
+	...customAssets
 ];
 
 // install service worker

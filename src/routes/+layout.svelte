@@ -2,20 +2,39 @@
 <script lang="ts">
     import '$lib/css/chota.min.css';
     import '$lib/css/style.css';
+    import UpdatePrompt from "$lib/components/UpdatePrompt.svelte";
     import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
+    let needRefresh:boolean = false;
+    let serviceWorker:ServiceWorker | null;
+
     async function detectServiceWorkerUpdate() {
         const registration = await navigator.serviceWorker.ready;
+        
+        if (registration.waiting) {
+            serviceWorker = registration.waiting;
+            needRefresh = true;
+        }
 
         registration.addEventListener('updatefound', () => {
-            const newServiceWorker = registration.installing;
-            newServiceWorker?.addEventListener('statechange', () => {
-                if (newServiceWorker.state == 'installed') {
-                    newServiceWorker.postMessage({ type: 'SKIP_WAITING' });
-                }
-            })
-        })
+            if (registration.installing) {
+                serviceWorker = registration.installing;
+                serviceWorker?.addEventListener('statechange', () => {
+                    if (serviceWorker?.state == 'installed') {
+                        needRefresh = true;
+                    }
+                });
+            }
+        });
+    }
+
+    function onUpdatePromptReload()
+    {
+        if (!serviceWorker) return;
+        
+        serviceWorker?.postMessage({ type: 'SKIP_WAITING' });
+        needRefresh = false;
     }
 
     onMount(() => {
@@ -41,4 +60,6 @@
     <footer class="text-center">
         <h5>©2021 - <a href="https://adityarahmanda.github.io" class="copyright" style="text-decoration: underline;">Aditya Rahmanda</a></h5>
     </footer>
+
+    <UpdatePrompt needRefresh={needRefresh} onReload={onUpdatePromptReload} />
 </main>

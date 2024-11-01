@@ -3,12 +3,12 @@ import '$lib/css/chota.min.css';
 import '$lib/css/style.css';
 import SvelteSeo from "svelte-seo";
 import { base } from '$app/paths';
-	import WidgetFeedback from '$lib/components/WidgetFeedback.svelte';
-	import WidgetRecomendation from '$lib/components/WidgetRecomendation.svelte';
+import WidgetFeedback from '$lib/components/WidgetFeedback.svelte';
+import WidgetRecomendation from '$lib/components/WidgetRecomendation.svelte';
 </script>
 
 <SvelteSeo
-  title="Alih Aksara - Alat transliterasi sederhana aksara Jawa dan aksara lainnya."
+  title="Alih Aksara"
   description="Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya."
   canonical="https://adityarahmanda.github.io/alih-aksara"
   keywords="alat, transliterasi, konversi, alih, aksara, jawa, latin, kawi"
