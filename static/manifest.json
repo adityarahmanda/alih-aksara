@@ -2,6 +2,7 @@
     "name": "Alih Aksara",
     "short_name": "Alih Aksara",
     "description": "Alat transliterasi sederhana untuk mengalihkan/mengubah/mengkonversi teks aksara Jawa ke bentuk aksara lain ataupun sebaliknya.",
+    "scope": "/alih-aksara",
     "start_url": "/alih-aksara/latin-jawa?fullscreen=true",
     "display": "fullscreen",
     "background_color": "#ffffff",

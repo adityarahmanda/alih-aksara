@@ -3,6 +3,7 @@
     import '$lib/css/chota.min.css';
     import '$lib/css/style.css';
     import UpdatePrompt from "$lib/components/UpdatePrompt.svelte";
+    import { goto } from '$app/navigation';
     import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
@@ -35,6 +36,7 @@
         
         serviceWorker?.postMessage({ type: 'SKIP_WAITING' });
         needRefresh = false;
+		goto(window.location.pathname+'?eraseCache=true');
     }
 
     onMount(() => {
