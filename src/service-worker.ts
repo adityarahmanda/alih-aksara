@@ -12,11 +12,11 @@ const addDomain = (assets: string[]) => assets.map((f) => self.location.origin +
 
 // hard-coded list of app routes we want to preemptively cache
 const routes = [
-	"/",
-	"/jawa-kawi",
-	"/jawa-latin",
-	"/latin-jawa",
-	"/latin-kawi",
+	"/alih-aksara",
+	"/alih-aksara/jawa-kawi",
+	"/alih-aksara/jawa-latin",
+	"/alih-aksara/latin-jawa",
+	"/alih-aksara/latin-kawi",
 ];
 
 // hard-coded list of other assets necessary for page load outside our domain
