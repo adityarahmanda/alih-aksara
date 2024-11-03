@@ -1,48 +1,29 @@
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
-    import '$lib/css/chota.min.css';
-    import '$lib/css/style.css';
-    import UpdatePrompt from "$lib/components/UpdatePrompt.svelte";
-    import { goto } from '$app/navigation';
-    import { base } from '$app/paths';
-	import { onMount } from 'svelte';
+import '$lib/css/chota.min.css';
+import '$lib/css/style.css';
+import { base } from '$app/paths';
+import { onMount } from 'svelte'; 
+import { pwaInfo } from 'virtual:pwa-info';
 
-    let needRefresh:boolean = false;
-    let serviceWorker:ServiceWorker | null;
+$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
-    async function detectServiceWorkerUpdate() {
-        const registration = await navigator.serviceWorker.ready;
-        
-        if (registration.waiting) {
-            serviceWorker = registration.waiting;
-            needRefresh = true;
-        }
-
-        registration.addEventListener('updatefound', () => {
-            if (registration.installing) {
-                serviceWorker = registration.installing;
-                serviceWorker?.addEventListener('statechange', () => {
-                    if (serviceWorker?.state == 'installed') {
-                        needRefresh = true;
-                    }
-                });
-            }
-        });
+onMount(async () => {
+    if (pwaInfo) {
+        const { registerSW } = await import('virtual:pwa-register')
+        registerSW({
+            immediate: true,
+            onOfflineReady() {},
+            onRegistered(r) {},
+            onRegisterError(error) {}
+        })
     }
-
-    function onUpdatePromptReload()
-    {
-        if (!serviceWorker) return;
-        
-        serviceWorker?.postMessage({ type: 'SKIP_WAITING' });
-        needRefresh = false;
-		goto(window.location.pathname+'?eraseCache=true');
-    }
-
-    onMount(() => {
-        detectServiceWorkerUpdate()
-    });
+})
 </script>
+
+<svelte:head>
+ 	{@html webManifestLink} 
+</svelte:head>
 
 <main class="container">
     <nav class="nav">
@@ -62,6 +43,4 @@
     <footer class="text-center">
         <h5>©2021 - <a href="https://adityarahmanda.github.io" class="copyright" style="text-decoration: underline;">Aditya Rahmanda</a></h5>
     </footer>
-
-    <UpdatePrompt needRefresh={needRefresh} onReload={onUpdatePromptReload} />
 </main>
