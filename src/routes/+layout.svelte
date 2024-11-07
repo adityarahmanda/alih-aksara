@@ -27,10 +27,10 @@ onMount(async () => {
 
 <main class="container">
     <nav class="nav">
-        <div class="nav-left">
+        <div class="nav-left" style="flex-basis: auto;">
             <a class="brand" href="{ base }/">alih aksara</a>
         </div>
-        <div class="nav-right">
+        <div class="nav-right" style="flex-basis: auto;">
             <a href="{ base }/latin-jawa">Latin-Jawa</a>
             <a href="{ base }/jawa-latin">Jawa-Latin</a>
             <a href="{ base }/latin-kawi">Latin-Kawi</a>
