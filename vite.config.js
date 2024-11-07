@@ -19,39 +19,9 @@ export default defineConfig({
 				cleanupOutdatedCaches: true,
 				offlineGoogleAnalytics: true,
 				globPatterns: [
-					'client/**/*.{js,css,ico,png,svg,webp,webmanifest}', 
+					'client/**/*.{ts,js,css,ico,png,svg,woff2,webp,webmanifest}', 
 					'prerendered/**/*.html',
 					'server/**/*.{js,css}'
-				],
-				runtimeCaching: [
-					{
-						urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-						handler: 'CacheFirst',
-						options: {
-							cacheName: 'workbox-google-fonts-cache',
-							expiration: {
-								maxEntries: 10,
-								maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-							},
-							cacheableResponse: {
-								statuses: [0, 200]
-							}
-						}
-						},
-						{
-						urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-						handler: 'CacheFirst',
-						options: {
-							cacheName: 'workbox-gstatic-fonts-cache',
-							expiration: {
-								maxEntries: 10,
-								maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-							},
-							cacheableResponse: {
-								statuses: [0, 200]
-							},
-						}
-					}
 				]
 			},
 			manifest: {
