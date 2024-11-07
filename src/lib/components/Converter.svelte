@@ -223,23 +223,23 @@ function onPointerLeaveCopyButton()
     
             {#if method == ConverterMethod.LatinToJava || method == ConverterMethod.LatinToKawi }
             <div style="margin-block-start: 1em;">
-                <label style="margin-right: .5em;">
+                <label style="display:inline-block;margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isPepetTypeMode }>
                     Mode Ketik Pepet
                 </label>
     
-                <label style="margin-right: .5em;">
+                <label style="display:inline-block;margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isIgnoreSpace } on:change={ onInputUpdate }>
                     Abaikan Spasi
                 </label>
     
                 {#if method == ConverterMethod.LatinToJava }
-                <label style="margin-right: .5em;">
+                <label style="display:inline-block;margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onInputUpdate }>
                     Murda
                 </label>
     
-                <label style="margin-right: .5em;">
+                <label style="display:inline-block;margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onInputUpdate }>
                     Diftong
                 </label>
@@ -256,7 +256,7 @@ function onPointerLeaveCopyButton()
     
             {#if method == ConverterMethod.JavaToLatin || method == ConverterMethod.JavaToKawi }
             <div style="margin-block-start: 1em;">
-                <label style="margin-right: .5em;">
+                <label style="display:inline-block;margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isVirtualKeyboardActive }>
                     Aktifkan Keyboard Virtual Aksara Jawa
                 </label>
