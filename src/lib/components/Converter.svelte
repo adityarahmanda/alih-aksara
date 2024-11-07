@@ -7,6 +7,8 @@ import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
 import { javaDefaultKeyboard, javaCapslockKeyboard } from "$lib/scripts/javakeyboard";
 import WidgetFeedback from "./WidgetFeedback.svelte";
 import WidgetRecomendation from "./WidgetRecomendation.svelte";
+import Fa from 'svelte-fa'
+import { faCopy } from '@fortawesome/free-regular-svg-icons'
 
 let input:string = "";
 let output:string = "";
@@ -272,7 +274,7 @@ function onPointerLeaveCopyButton()
                 <span>{ output }</span>
                 <div class="action-button-area">
                     <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip" data-text={ tooltipMessage } on:click={ onClickCopyButton } on:pointerleave={ onPointerLeaveCopyButton }>
-                        <span class="material-symbols-outlined">content_copy</span>
+                        <Fa icon={ faCopy } style="font-size: 24px"/>
                     </button>
                 </div>
             </div>
