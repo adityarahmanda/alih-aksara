@@ -7,8 +7,11 @@ import { convert as javaKawiConvert } from "$lib/scripts/javakawi";
 import { javaDefaultKeyboard, javaCapslockKeyboard } from "$lib/scripts/javakeyboard";
 import WidgetFeedback from "./WidgetFeedback.svelte";
 import WidgetRecomendation from "./WidgetRecomendation.svelte";
-import Fa from 'svelte-fa'
-import { faCopy } from '@fortawesome/free-regular-svg-icons'
+import copySvg from '@material-symbols/svg-400/outlined/content_copy.svg';
+import keyCapslockSvg from '@material-symbols/svg-400/outlined/keyboard_capslock.svg';
+import keyReturnSvg from '@material-symbols/svg-400/outlined/keyboard_return.svg';
+import keyBackspaceSvg from '@material-symbols/svg-400/outlined/backspace.svg';
+import keySpaceSvg from '@material-symbols/svg-400/outlined/space_bar.svg';
 
 let input:string = "";
 let output:string = "";
@@ -263,7 +266,7 @@ function onPointerLeaveCopyButton()
             </div>
                 {#if isVirtualKeyboardActive }
                 <div class="virtual-keyboard layout">
-                    {#each javaKeyboard as key, i}<button class="button outline icon-only" on:click= { () => { insertToTextarea(key[1]); onInputUpdate(); } }>{key[1]}</button>{#if i == 12 || i == 25}<br/>{/if}{#if i == 36}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } }>keyboard_return</button><br/><button class="button activatable outline icon-only material-symbols-outlined" class:active={ isCapslock } style="width: 12%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>keyboard_capslock</button>{/if}{/each}<button class="button outline icon-only material-symbols-outlined" style="width: 12%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }>backspace</button><br/><button class="button outline icon-only material-symbols-outlined" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } }>space_bar</button>
+                    {#each javaKeyboard as key, i}<button class="button outline icon-only" on:click= { () => { insertToTextarea(key[1]); onInputUpdate(); } }>{key[1]}</button>{#if i == 12 || i == 25}<br/>{/if}{#if i == 36}<button class="button outline icon-only" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } }> { @html keyReturnSvg } </button><br/><button class="button activatable outline icon-only" class:active={ isCapslock } style="width: 12%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>{ @html keyCapslockSvg }</button>{/if}{/each}<button class="button outline icon-only" style="width: 12%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }> { @html keyBackspaceSvg } </button><br/><button class="button outline icon-only" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } }>{ @html keySpaceSvg }</button>
                 </div>
                 {/if}
             {/if}
@@ -274,7 +277,7 @@ function onPointerLeaveCopyButton()
                 <span>{ output }</span>
                 <div class="action-button-area">
                     <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip" data-text={ tooltipMessage } on:click={ onClickCopyButton } on:pointerleave={ onPointerLeaveCopyButton }>
-                        <Fa icon={ faCopy } style="font-size: 24px"/>
+                        { @html copySvg }
                     </button>
                 </div>
             </div>

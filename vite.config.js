@@ -1,8 +1,14 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit'
+import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
+	resolve: {
+		alias: {
+			'@material_symbols': '/node_modules/@material_symbols'
+		}
+	},
 	plugins: [
 		sveltekit(),
 		SvelteKitPWA({
@@ -98,6 +104,9 @@ export default defineConfig({
 					}
 				]
 			}
+		}),
+		svgLoader({
+			defaultImport: 'raw'
 		})
 	]
 });
