@@ -166,8 +166,10 @@ function insertToTextarea(str:string) {
     var nextCursorPos = textareaEl.selectionStart + str.length;
     textareaEl.value = textareaEl.value.substring(0, textareaEl.selectionStart) + str + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
     input = textareaEl.value;
+    textareaEl.readOnly = true;
     textareaEl.focus();
     textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
+    setTimeout(() => textareaEl.readOnly = false, 1);
 }
 
 function onPressBackspace() {
