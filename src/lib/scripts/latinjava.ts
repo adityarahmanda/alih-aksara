@@ -426,7 +426,7 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                    var cBefore = str[i - 1];
                    
                    // check nga lelet
-                   if(cBefore === 'l') {
+                   if(isConsonantL(cBefore)) {
                         output.pop(); // pop pangkon
                         output.pop(); // pop aksara la
                         output.push('ꦊ');
@@ -434,7 +434,7 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                     }
 
                    // check pa ceret
-                   if(cBefore === 'r') {
+                   if(isConsonantR(cBefore)) {
                        output.pop(); // pop pangkon
                        output.pop(); // pop aksara ra
                        output.push('ꦉ');
@@ -449,14 +449,14 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                     var cBefore = str[i - 1];
                     
                     // check nga lelet Raswadi
-                    if(c2Before === 'l' && isVowelsPepet(cBefore)) {
+                    if(isConsonantL(c2Before) && isVowelsPepet(cBefore)) {
                         output.pop(); // pop nga lelet
                         output.push('ꦋ');
                         continue;
                     }
 
                     // check pa ceret-tarung
-                    if(c2Before === 'r' && isVowelsPepet(cBefore)) {
+                    if(isConsonantR(c2Before) && isVowelsPepet(cBefore)) {
                         output.pop(); // pop pa ceret
                         output.push('ꦉꦴ');
                         continue;
@@ -583,6 +583,14 @@ function isConsonantsSandhanganPanyigeg(s:string):boolean {
 
 function isConsonantsSandhanganWyanjana(s:string):boolean {
    return Object.prototype.hasOwnProperty.call(sandhanganWyanjana, s.toLowerCase());
+}
+
+function isConsonantL(s:string):boolean { 
+    return s === 'L' || s === 'l';
+}
+
+function isConsonantR(s:string):boolean { 
+    return s === 'R' || s === 'r';
 }
 
 function isVowels(s:string):boolean { 
