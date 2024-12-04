@@ -23,6 +23,7 @@ let isMurda:boolean = false;
 let isDiphtong:boolean = false;
 let isVirtualKeyboardActive:boolean = false;
 let isCapslock:boolean = false;
+let copyTimer: ReturnType<typeof setTimeout>;
 
 const specialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
 let javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
@@ -196,24 +197,29 @@ function toggleCapslock()
 
 function copyToClipboard(text:string) {
     navigator.clipboard.writeText(text)
-        .then(res => {
-            tooltipMessage = "Berhasil disalin";
-            tooltipEl.classList.add("show");
-        }).catch(error => {
-            tooltipMessage = "Gagal disalin";
-            tooltipEl.classList.add("show");
-        });
+        .then(_ => showCopyTooltip("Berhasil disalin"))
+        .catch(_ => showCopyTooltip("Gagal disalin"));
+}
+
+function showCopyTooltip(message:string)
+{
+    tooltipMessage = message;
+    tooltipEl.classList.add("show");
+}
+
+function hideCopyTooltip()
+{
+    tooltipEl.classList.remove("show");
 }
 
 function onClickCopyButton()
 {
+    clearTimeout(copyTimer);
     copyToClipboard(output);
+    copyTimer = setTimeout(hideCopyTooltip, 2000);
 }
 
-function onPointerLeaveCopyButton()
-{
-    tooltipEl.classList.remove("show");
-}
+
 </script>
 
 <svelte:document on:keydown={ onDocumentKeyDown } on:keyup={ onDocumentKeyUp } />
@@ -276,7 +282,7 @@ function onPointerLeaveCopyButton()
                 <div class="content">
                 <span>{ output }</span>
                 <div class="action-button-area">
-                    <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip" data-text={ tooltipMessage } on:click={ onClickCopyButton } on:pointerleave={ onPointerLeaveCopyButton }>
+                    <button bind:this={ tooltipEl } class="button copy icon-only clear tooltip" data-text={ tooltipMessage } on:click={ onClickCopyButton }>
                         { @html copySvg }
                     </button>
                 </div>
@@ -311,7 +317,7 @@ function onPointerLeaveCopyButton()
             </li>
             <li>
                 <h5>Diftong</h5>
-                <p>Saat diaktifkan, gugus vokal 'ai', 'au' dan vokal panjang 'aa', 'ii', 'uu' akan diubah menjadi karakter spesial aksara jawa, yakni ꦻ (Dirga Mure) untuk 'ai', ꦻꦴ (Dirga Mure Tarung) untuk 'au', ꦴ (Tarung) untuk 'aa', ꦷ (Dirga Melik) untuk 'ii', dan ꦹ (Dirga Mendhut) untuk 'uu'.</p>
+                <p>Saat diaktifkan, gugus vokal 'ai', 'au' dan vokal panjang 'aa', 'ii', 'uu' akan diubah menjadi karakter spesial aksara jawa, yakni ꦻ (Dirga Mure) untuk 'ai', ꦻꦴ (Dirga Mure Tarung) untuk 'au', ꦴ (Tarung) untuk 'aa', ꦷ (Dirga Melik) untuk 'ii', ꦹ (Dirga Mendhut) untuk 'uu', ꦋ (Nga Lêlêt Raswadi) untuk 'lêu', dan ꦉꦴ (Pa Cêret-Tarung) untuk 'rêu'.</p>
             </li>
             <li>
                 <h5>Tombol Karakter Spesial</h5>
