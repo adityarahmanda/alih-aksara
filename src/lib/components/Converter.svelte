@@ -371,8 +371,14 @@ function onClickCopyButton()
             </li>
             <li>
                 <h5>Abaikan Spasi</h5>
+                {#if method == ConverterMethod.LatinToJava }
                 <p>Saat diaktifkan, proses konversi akan mengabaikan spasi dari kolom masukan. Pada dasarnya, aksara Jawa tidak memiliki spasi pada antarkatanya. Meskipun begitu, spasi masih dapat digunakan untuk memperjelas pemisahan kata.</p>                
+                {/if}
+                {#if method == ConverterMethod.LatinToKawi}
+                <p>Saat diaktifkan, proses konversi akan mengabaikan spasi dari kolom masukan. Pada dasarnya, aksara Kawi tidak memiliki spasi pada antarkatanya.</p>
+                {/if}
             </li>
+            {#if method == ConverterMethod.LatinToJava }
             <li>
                 <h5>Diftong</h5>
                 <p>Saat diaktifkan, gugus vokal 'ai', 'au', 'êu' dan vokal panjang 'aa', 'ii', 'uu' akan diubah menjadi karakter spesial aksara jawa, yakni ꦻ (Dirga Mure) untuk 'ai', ꦻꦴ (Dirga Mure Tarung) untuk 'au', ꦴ (Tarung) untuk 'aa', ꦷ (Dirga Mêlik) untuk 'ii', ꦹ (Dirga Mêndhut) untuk 'uu', ꦋ (Nga Lêlêt Raswadi) untuk 'lêu', dan ꦉꦴ (Pa Cêrêt-Tarung) untuk 'rêu'.</p>
@@ -382,7 +388,6 @@ function onClickCopyButton()
                 <p>Saat diaktifkan, vokal yang berdiri sendiri (tidak memiliki konsonan di awal suku katanya) akan diubah menjadi aksara Swara. 
                 Aksara ini digunakan untuk menuliskan nama atau istilah yang pelafalannya perlu diperjelas — menggantikan ꦲ (aksara Ha) yang memiliki pelafalan ambigu (bisa dibaca a/ha).</p>                
             </li>
-            {#if method == ConverterMethod.LatinToJava }
             <li>
                 <h5>Aksara Murda</h5>
                 <p>Saat diaktifkan, aksara pertama dari aksara-aksara ꦤ, ꦏ, ꦠ, ꦱ, ꦥ, ꦘ, ꦒ, ꦧ akan diubah ke dalam bentuk aksara Murda-nya ꦟ, ꦑ, ꦡ, ꦯ, ꦦ, ꦟ, ꦓ, ꦨ.
