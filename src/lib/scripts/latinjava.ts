@@ -11,10 +11,12 @@ const wyanjana:{ [id: string]: string; }  = {
     f: 'ꦥ꦳',      // fa rekan
     g: 'ꦒ',       // ga
     gh: 'ꦒ꦳',     // gha rekan
+    g̣: 'ꦓ',
     h: 'ꦲ',       // ha
     j: 'ꦗ',       // ja
     jh: 'ꦙ',       // jha murda
     k: 'ꦏ',       // ka
+    ḳ: 'ꦑ',        // ka murda
     kh: 'ꦏ꦳',     // kha rekan
     l: 'ꦭ',       // la
     m: 'ꦩ',       // ma
@@ -54,6 +56,7 @@ const swara:{ [id: string]: string; }  = {
    au: 'ꦎꦴ',       // aksara swara au
    ôu: 'ꦎꦴ',       // aksara swara au
    i: 'ꦆ',       // aksara swara i
+   ï: 'ꦅ',         // aksara i kawi
    ii: 'ꦇ',       // aksara swara a
    ī: 'ꦇ',       // aksara swara a
    u: 'ꦈ',       // aksara swara u
@@ -320,6 +323,47 @@ function convert(str:string, isIgnoreSpace:boolean = false, isDiphthong:boolean 
            continue;
        }
 
+        if(isVowels(c) && i + 1 < length) {
+            var c2 = str[i + 1];
+
+            // change ia, iu, ie, iê, io to iya, iyu, iye, iyê, iyo
+            if(isVowelsWulu(c) && isVowels(c2) && !isVowelsWulu(c2)) {
+                str = str.substring(0, i + 1) + 'y' + str.substring(i + 1, str.length);
+                length = str.length;
+            }
+
+            // change ua, ui, ue, uê, uo to uwa, uwi, uwe, uwê, uwo
+            if(isVowelsSuku(c) && isVowels(c2) && !isVowelsSuku(c2)) {
+                str = str.substring(0, i + 1) + 'w' + str.substring(i + 1, str.length);
+                length = str.length;
+            }
+
+            // change ea to eya
+            if(isVowelsTaling(c) && isVowelsA(c2)) {
+                str = str.substring(0, i + 1) + 'y' + str.substring(i + 1, str.length);
+                length = str.length;
+            }
+
+            // change eo to eyo
+            if(isVowelsTaling(c) && isVowelsTalingTarung(c2)) {
+                str = str.substring(0, i + 1) + 'y' + str.substring(i + 1, str.length);
+                length = str.length;
+            }
+            
+            // change oa to owa
+            if(isVowelsTalingTarung(c) && isVowelsA(c2)) {
+                str = str.substring(0, i + 1) + 'w' + str.substring(i + 1, str.length);
+                length = str.length;
+            }
+            
+            // change oe to owe
+            if(isVowelsTalingTarung(c) && isVowelsTaling(c2)) {
+                str = str.substring(0, i + 1) + 'w' + str.substring(i + 1, str.length);
+                length = str.length;
+            }
+        }
+
+
        if(isAksaraSwara && isVowelsSwara(c)) {
             var cBefore = "";
             if (i - 1 >= 0)
@@ -363,46 +407,6 @@ function convert(str:string, isIgnoreSpace:boolean = false, isDiphthong:boolean 
        if(isVowels(c)) {
            isAlreadyStacked = false;
 
-           if(i + 1 < length) {
-               var c2 = str[i + 1];
-
-               // change ia, iu, ie, iê, io to iya, iyu, iye, iyê, iyo
-               if(isVowelsWulu(c) && isVowels(c2) && !isVowelsWulu(c2)) {
-                   str = str.substring(0, i + 1) + 'y' + str.substring(i + 1, str.length);
-                   length = str.length;
-               }
-
-               // change ua, ui, ue, uê, uo to uwa, uwi, uwe, uwê, uwo
-               if(isVowelsSuku(c) && isVowels(c2) && !isVowelsSuku(c2)) {
-                   str = str.substring(0, i + 1) + 'w' + str.substring(i + 1, str.length);
-                   length = str.length;
-               }
-
-               // change ea to eya
-               if(isVowelsTaling(c) && isVowelsA(c2)) {
-                   str = str.substring(0, i + 1) + 'y' + str.substring(i + 1, str.length);
-                   length = str.length;
-               }
-
-               // change eo to eyo
-               if(isVowelsTaling(c) && isVowelsTalingTarung(c2)) {
-                   str = str.substring(0, i + 1) + 'y' + str.substring(i + 1, str.length);
-                   length = str.length;
-               }
-               
-               // change oa to owa
-               if(isVowelsTalingTarung(c) && isVowelsA(c2)) {
-                   str = str.substring(0, i + 1) + 'w' + str.substring(i + 1, str.length);
-                   length = str.length;
-               }
-               
-               // change oe to owe
-               if(isVowelsTalingTarung(c) && isVowelsTaling(c2)) {
-                   str = str.substring(0, i + 1) + 'w' + str.substring(i + 1, str.length);
-                   length = str.length;
-               }
-           }
-           
            if(isVowelsPepet(c)) {
                // check cakra keret
                if(output.length - 1 >= 0) {

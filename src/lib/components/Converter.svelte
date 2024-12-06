@@ -30,15 +30,18 @@ let isCapslock:boolean = false;
 let copyTimer: ReturnType<typeof setTimeout>;
 
 const javaSpecialCharacters = [
-    {char: 'ā', title: 'ꦴ (Tarung)'},
-    {char: 'ī', title: 'ꦷ (Dirga Melik)'},
-    {char: 'ū', title: 'ꦹ (Dirga Mendhut)'},
-    {char: 'ê', title: 'ꦼ (Pêpêt)'},
+    {char: 'ā', title: 'ꦴ (Tarung) atau ꦄꦴ (A Dirga, jika vokal berdiri sendiri)'},
+    {char: 'ï', title: 'ꦅ (I Kawi)'},
+    {char: 'ī', title: 'ꦷ (Dirga Mêlik) atau ꦇ (I Dirga, jika vokal berdiri sendiri)'},
+    {char: 'ū', title: 'ꦹ (Dirga Mêndhut) atau ꦈꦴ (U Dirga, jika vokal berdiri sendiri)'},
+    {char: 'ê', title: 'ꦼ (Pêpêt) atau ꦄꦼ (Swara Ê, jika vokal berdiri sendiri)'},
     {char: 'bh', title: 'ꦨ (Ba Murda)'},
     {char: 'ch', title: 'ꦖ (Ca Mahaprana)'},
     {char: 'ḍ', title: 'ꦝ (Dha)'},
     {char: 'ḍh', title: 'ꦞ (Dha Mahaprana)'},
+    {char: 'g̣', title: 'ꦓ (Ga Murda)'},
     {char: 'jh', title: 'ꦙ (Ja Mahaprana)'},
+    {char: 'ḳ', title: 'ꦑ (Ka Murda)'},
     {char: 'ṛ', title: 'ꦬ (Ra Agung)'},
     {char: 'ṣ', title: 'ꦰ (Sa Mahaprana)'},
     {char: 'ś', title: 'ꦯ (Sa Murda)'},
@@ -52,15 +55,18 @@ const javaSpecialCharacters = [
 
 // TODO: update title
 const kawiSpecialCharacters = [
-    {char: 'ā', title: 'ꦴ (Tarung)'},
-    {char: 'ī', title: 'ꦷ (Dirga Melik)'},
-    {char: 'ū', title: 'ꦹ (Dirga Mendhut)'},
-    {char: 'ê', title: 'ꦼ (Pêpêt)'},
+    {char: 'ā', title: 'ꦴ (Tarung) atau ꦄꦴ (A Dirga, jika vokal berdiri sendiri)'},
+    {char: 'ï', title: 'ꦅ (I Kawi)'},
+    {char: 'ī', title: 'ꦷ (Dirga Mêlik) atau ꦇ (I Dirga, jika vokal berdiri sendiri)'},
+    {char: 'ū', title: 'ꦹ (Dirga Mêndhut) atau ꦈꦴ (U Dirga, jika vokal berdiri sendiri)'},
+    {char: 'ê', title: 'ꦼ (Pêpêt) atau ꦄꦼ (Swara Ê, jika vokal berdiri sendiri)'},
     {char: 'bh', title: 'ꦨ (Ba Murda)'},
     {char: 'ch', title: 'ꦖ (Ca Mahaprana)'},
     {char: 'ḍ', title: 'ꦝ (Dha)'},
     {char: 'ḍh', title: 'ꦞ (Dha Mahaprana)'},
+    {char: 'g̣', title: 'ꦓ (Ga Murda)'},
     {char: 'jh', title: 'ꦙ (Ja Mahaprana)'},
+    {char: 'ḳ', title: 'ꦑ (Ka Murda)'},
     {char: 'ṣ', title: 'ꦰ (Sa Mahaprana)'},
     {char: 'ś', title: 'ꦯ (Sa Murda)'},
     {char: 'ṭ', title: 'ꦡ (Ta Murda)'},
@@ -400,17 +406,20 @@ function onFocus(event:FocusEvent) {
             <li>
                 <h5>Tombol Karakter Spesial</h5>
                 <p>Berisikan tombol-tombol untuk mengetikkan karakter-karakter spesial yang digunakan untuk merepresentasikan huruf-huruf aksara jawa yang tidak dapat diwakili oleh alfabet A-Z.</p>
-                <p>Berikut karakter-karakter spesial yang digunakan dalam konverter ini beserta hasil konversinya :</p>
+                <p>Berikut karakter-karakter spesial yang digunakan dalam transliterator ini beserta hasil konversinya :</p>
                 <ul style="margin-block-end: 1em">
-                    <li>ā menghasilkan ꦴ (Tarung)</li>  
-                    <li>ī menghasilkan ꦷ (Dirga Mêlik)</li>  
-                    <li>ū menghasilkan ꦹ (Dirga Mêndhut)</li>
-                    <li>ê menghasilkan  ꦼ (Pêpêt)</li>
+                    <li>ā menghasilkan ꦴ (Tarung) atau ꦄꦴ (Swara A Dirga, jika vokal berdiri sendiri)</li> 
+                    <li>ï menghasilkan ꦅ (I Kawi)</li> 
+                    <li>ī menghasilkan ꦷ (Dirga Mêlik) atau ꦇ (Swara I Dirga, jika vokal berdiri sendiri)</li>  
+                    <li>ū menghasilkan ꦹ (Dirga Mêndhut) atau ꦈꦴ (Swara U Dirga, jika vokal berdiri sendiri)</li>
+                    <li>ê menghasilkan  ꦼ (Pêpêt) atau ꦄꦼ (Swara Ê, jika vokal berdiri sendiri)</li>
                     <li>bh menghasilkan ꦨ (Ba Murda)</li>
                     <li>ch menghasilkan ꦖ (Ca Mahaprana)</li>
                     <li>ḍ menghasilkan ꦝ (Dha)</li>  
                     <li>ḍh menghasilkan ꦞ (Dha Mahaprana)</li> 
+                    <li>g̣ menghasilkan ꦓ (Ga Murda)</li>
                     <li>jh menghasilkan ꦙ (Ja Mahaprana)</li>
+                    <li>ḳ menghasilkan ꦑ (Ka Murda)</li>
                     <li>ṛ menghasilkan ꦬ (Ra Agung)</li>
                     <li>ṣ menghasilkan ꦰ (Sa Mahaprana)</li>
                     <li>ś menghasilkan ꦯ (Sa Murda)</li>
