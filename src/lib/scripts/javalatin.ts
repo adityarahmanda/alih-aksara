@@ -19,39 +19,45 @@ const wyanjana:{ [id: string]: string; }  = {
     'ꦧ':'b',      // ba
     'ꦛ':'t',      // tha
     'ꦔ':'ng',     // nga
-    'ꦟ':'n',       // na murda
-    'ꦑ':'k',       // ka murda
-    'ꦡ':'t',       // ta murda
-    'ꦯ':'s',       // sa murda
-    'ꦦ':'p',       // pa murda
+    'ꦟ':'ṇ',       // na murda
+    'ꦑ':'ḳ',       // ka murda
+    'ꦡ':'ṭ',       // ta murda
+    'ꦯ':'ś',       // sa murda
+    'ꦦ':'ph',       // pa murda
     'ꦘ':'ny',      // nya murda
-    'ꦓ':'g',       // ga murda
-    'ꦨ':'b',       // ba murda
-    'ꦰ':'s',       // sa mahaprana
+    'ꦓ':'g̣',       // ga murda
+    'ꦨ':'bh',       // ba murda
+    'ꦰ':'ṣ',       // sa mahaprana
     'ꦖ':'ch',      // cha mahaprana
-    'ꦣ':'d',        // da mahaprana
-    'ꦞ':'dh',      // dha mahaprana
-    'ꦜ':'th',      // tha mahaprana
-    'å':'jh',      // ja jera
+    'ꦣ':'ḍ',        // da mahaprana
+    'ꦞ':'ḍh',      // dha mahaprana
+    'ꦜ':'ṭh',      // tha mahaprana
+    'ꦙ':'jh',      // ja mahaprana
     'ꦐ':'q',       // ka sasak
-    'ꦬ':'r',       // ra agung
+    'ꦬ':'ṛ',       // ra agung
 }
 
 const rekan:{ [id: string]: string; }  = {
-    'ꦢ':'dz',      // ga
+    'ꦏ':'kh',      // dz
+    'ꦢ':'dz',      // dz
     'ꦒ':'gh',      // gh
     'ꦗ':'z',      // za
     'ꦥ':'f',      // fa
-    'ꦮ':'v',      // ga
+    'ꦮ':'v',      // va
 }
 
 const swara:{ [id: string]: string; }  = {
-    'ꦄ':'A',        // a 
-    'ꦆ':'I',        // i 
-    'ꦅ':'I',        // i kawi
-    'ꦈ':'U',        // u 
-    'ꦌ':'E',        // e 
-    'ꦎ':'O',        // o
+    'ꦄ':'a',        // a 
+    'ꦆ':'i',        // i 
+    'ꦅ':'ï',        // i kawi
+    'ꦇ':'ī',        // i dirga
+    'ꦈ':'u',        // u 
+    'ꦈꦴ':'ū',       // u dirga
+    'ꦌ':'e',        // e
+    'ꦄꦼ':'ê',       // ê
+    'ꦍ':'ai',      // ai
+    'ꦎ':'o',        // o
+    'ꦎꦴ':'au'       // au
 }
 
 // diacritics swara
@@ -117,6 +123,15 @@ function convert(str:string):string {
 
     for (let i = 0; i < length; i++) {
         var c:string = str[i];
+        var cc:string = "";
+        if (i + 1 < str.length)
+            cc = c + str[i + 1];
+
+        if(cc !== "" && isSwara(cc)) {
+            output.push(swara[cc]);
+            i++;
+            continue;
+        }
 
         if(isPangkon(c)) {
             if(output.length - 1 >= 0 && output[output.length - 1] === 'a') {
@@ -204,7 +219,7 @@ function convert(str:string):string {
                     continue;
                 }
 
-                if(lastOutput === 'Ê') {
+                if(lastOutput === 'ê') {
                     output.push('u');
                     continue;
                 }
@@ -251,8 +266,8 @@ function convert(str:string):string {
         }
             
         output.push(c);
-        // Debug.Log(output);
     }
+
     return output.join("");
 }
 
