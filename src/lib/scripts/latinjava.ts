@@ -63,8 +63,6 @@ const swara:{ [id: string]: string; }  = {
    é: 'ꦌ',       // aksara swara e
    ê: 'ꦄꦼ',      // aksara swara ê
    o: 'ꦎ',       // aksara swara o
-   lêu: 'ꦋ',       // aksara lêu
-   rêu: 'ꦉꦴ',       // aksara rêu
 }
 
 const murdaConsonants:{ [id: string]: string; } = {
