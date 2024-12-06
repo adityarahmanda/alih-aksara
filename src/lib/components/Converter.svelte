@@ -19,13 +19,54 @@ let output:string = "";
 let textareaEl:HTMLTextAreaElement;
 let isPepetTypeMode:boolean = true;
 let isIgnoreSpace:boolean = true;
+let isDiphtong:boolean = true;
+let isSwara:boolean = true;
 let isMurda:boolean = false;
-let isDiphtong:boolean = false;
 let isVirtualKeyboardActive:boolean = false;
 let isCapslock:boolean = false;
 let copyTimer: ReturnType<typeof setTimeout>;
 
-const specialCharacters = ['Ê', 'ê', 'ā', 'ī', 'ū', 'ḍ', 'ḍh', 'ṣ', 'ś', 'ṭ', 'ṭh', 'ṇ', 'ñ', 'ŋ'];
+const javaSpecialCharacters = [
+    {char: 'ā', title: 'ꦴ (Tarung)'},
+    {char: 'ī', title: 'ꦷ (Dirga Melik)'},
+    {char: 'ū', title: 'ꦹ (Dirga Mendhut)'},
+    {char: 'ê', title: 'ꦼ (Pêpêt)'},
+    {char: 'bh', title: 'ꦨ (Ba Murda)'},
+    {char: 'ch', title: 'ꦖ (Ca Mahaprana)'},
+    {char: 'ḍ', title: 'ꦝ (Dha)'},
+    {char: 'ḍh', title: 'ꦞ (Dha Mahaprana)'},
+    {char: 'jh', title: 'ꦙ (Ja Mahaprana)'},
+    {char: 'ṛ', title: 'ꦬ (Ra Agung)'},
+    {char: 'ṣ', title: 'ꦰ (Sa Mahaprana)'},
+    {char: 'ś', title: 'ꦯ (Sa Murda)'},
+    {char: 'ṭ', title: 'ꦡ (Ta Murda)'},
+    {char: 'ṭh', title: 'ꦜ (Tha Mahaprana)'},
+    {char: 'ṇ', title: 'ꦟ (Na Murda)'},
+    {char: 'ñ', title: 'ꦚ (Nya)'},
+    {char: 'ŋ', title: 'ꦔ (Nga)'},
+    {char: 'q', title: 'ꦐ (Ka Sasak)'}
+];
+
+// TODO: update title
+const kawiSpecialCharacters = [
+    {char: 'ā', title: 'ꦴ (Tarung)'},
+    {char: 'ī', title: 'ꦷ (Dirga Melik)'},
+    {char: 'ū', title: 'ꦹ (Dirga Mendhut)'},
+    {char: 'ê', title: 'ꦼ (Pêpêt)'},
+    {char: 'bh', title: 'ꦨ (Ba Murda)'},
+    {char: 'ch', title: 'ꦖ (Ca Mahaprana)'},
+    {char: 'ḍ', title: 'ꦝ (Dha)'},
+    {char: 'ḍh', title: 'ꦞ (Dha Mahaprana)'},
+    {char: 'jh', title: 'ꦙ (Ja Mahaprana)'},
+    {char: 'ṣ', title: 'ꦰ (Sa Mahaprana)'},
+    {char: 'ś', title: 'ꦯ (Sa Murda)'},
+    {char: 'ṭ', title: 'ꦡ (Ta Murda)'},
+    {char: 'ṭh', title: 'ꦜ (Tha Mahaprana)'},
+    {char: 'ṇ', title: 'ꦟ (Na Murda)'},
+    {char: 'ñ', title: 'ꦚ (Nya)'},
+    {char: 'ŋ', title: 'ꦔ (Nga)'},
+];
+
 let javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
 var javaKeyboardDictionary:{ [id: string]: string; } = { };
 javaDefaultKeyboard.forEach(x => {
@@ -75,7 +116,7 @@ function onInputUpdate()
     switch(method) { 
         case ConverterMethod.LatinToJava: 
         { 
-            output = latinJavaConvert(input, isIgnoreSpace, isMurda, isDiphtong);
+            output = latinJavaConvert(input, isIgnoreSpace, isDiphtong, isSwara, isMurda);
             break; 
         }
         case ConverterMethod.LatinToKawi: 
@@ -236,9 +277,9 @@ function onClickCopyButton()
             <div style="margin-block-start: 1em;">
                 <label style="display:inline-block;margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isPepetTypeMode }>
-                    Mode Ketik Pepet
+                    Mode Ketik Pêpêt
                 </label>
-    
+
                 <label style="display:inline-block;margin-right: .5em;">
                     <input type="checkbox" role="switch" bind:checked={ isIgnoreSpace } on:change={ onInputUpdate }>
                     Abaikan Spasi
@@ -246,22 +287,35 @@ function onClickCopyButton()
     
                 {#if method == ConverterMethod.LatinToJava }
                 <label style="display:inline-block;margin-right: .5em;">
-                    <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onInputUpdate }>
-                    Murda
+                    <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onInputUpdate }>
+                    Diftong
                 </label>
     
                 <label style="display:inline-block;margin-right: .5em;">
-                    <input type="checkbox" role="switch" bind:checked={ isDiphtong } on:change={ onInputUpdate }>
-                    Diftong
+                    <input type="checkbox" role="switch" bind:checked={ isSwara } on:change={ onInputUpdate }>
+                    Aksara Swara
+                </label>
+
+                <label style="display:inline-block;margin-right: .5em;">
+                    <input type="checkbox" role="switch" bind:checked={ isMurda } on:change={ onInputUpdate }>
+                    Aksara Murda
                 </label>
                 {/if}
             </div>
             
             <h5>Tombol Karakter Spesial</h5>
             <div class="virtual-keyboard">
-                {#each specialCharacters as char}
-                <button class="button outline icon-only" on:click= { () => { insertToTextarea(char); onInputUpdate(); } }>{char}</button>
+                {#if method == ConverterMethod.LatinToJava }
+                {#each javaSpecialCharacters as specialChar}
+                <button class="button outline icon-only" title="{specialChar.title}" on:click= { () => { insertToTextarea(specialChar.char); onInputUpdate(); } }>{specialChar.char}</button>
                 {/each}
+                {/if}
+                
+                {#if method == ConverterMethod.LatinToKawi }
+                {#each kawiSpecialCharacters as specialChar}
+                <button class="button outline icon-only" on:click= { () => { insertToTextarea(specialChar.char); onInputUpdate(); } }>{specialChar.char}</button>
+                {/each}
+                {/if}
             </div>
             {/if}
     
@@ -299,47 +353,56 @@ function onClickCopyButton()
         <h4>Keterangan Penggunaan</h4>
         <ul class="list-unstyled">
             <li>
-                <h5>Mode Ketik Pepet</h5>
+                <h5>Mode Ketik Pêpêt</h5>
                 {#if method == ConverterMethod.LatinToJava }
-                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan pepet (ꦼ) dalam aksara Jawa. Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
+                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan Pêpêt (ꦼ) dalam aksara Jawa. Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
                 {/if}
                 {#if method == ConverterMethod.LatinToKawi}
-                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan pepet (𑽀◌) dalam aksara Kawi. Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
+                <p>Saat diaktifkan, tombol x pada keyboard akan digantikan fungsinya untuk mengetikkan huruf ê yang merepresentasikan Pêpêt (𑽀◌) dalam aksara Kawi. Huruf ê sendiri menghasilkan bunyi seperti huruf e pada kata "enam".</p>
                 {/if}
             </li>
             <li>
                 <h5>Abaikan Spasi</h5>
-                <p>Saat diaktifkan, proses konversi akan mengabaikan spasi dari kolom masukan. Sebaliknya jika dinonaktifkan, spasi akan dikonversikan menjadi <i>zero width space</i> alias spasi yang tidak terlihat.</p>                
-            </li>
-            {#if method == ConverterMethod.LatinToJava }
-            <li>
-                <h5>Murda</h5>
-                <p>Saat diaktifkan, aksara pertama dari aksara-aksara ꦤ, ꦏ, ꦠ, ꦱ, ꦥ, ꦘ, ꦒ, ꦧ akan diubah ke dalam bentuk aksara murda-nya ꦟ, ꦑ, ꦡ, ꦯ, ꦦ, ꦟ, ꦓ, ꦨ.
-                Dalam aksara jawa, aksara murda digunakan layaknya huruf kapital dalam bahasa Indonesia dan dipakai khusus untuk penulisan nama, gelar, atau tempat.</p>
+                <p>Saat diaktifkan, proses konversi akan mengabaikan spasi dari kolom masukan. Pada dasarnya, aksara Jawa tidak memiliki spasi pada antarkatanya. Meskipun begitu, spasi masih dapat digunakan untuk memperjelas pemisahan kata.</p>                
             </li>
             <li>
                 <h5>Diftong</h5>
-                <p>Saat diaktifkan, gugus vokal 'ai', 'au' dan vokal panjang 'aa', 'ii', 'uu' akan diubah menjadi karakter spesial aksara jawa, yakni ꦻ (Dirga Mure) untuk 'ai', ꦻꦴ (Dirga Mure Tarung) untuk 'au', ꦴ (Tarung) untuk 'aa', ꦷ (Dirga Melik) untuk 'ii', ꦹ (Dirga Mendhut) untuk 'uu', ꦋ (Nga Lêlêt Raswadi) untuk 'lêu', dan ꦉꦴ (Pa Cêret-Tarung) untuk 'rêu'.</p>
+                <p>Saat diaktifkan, gugus vokal 'ai', 'au', 'êu' dan vokal panjang 'aa', 'ii', 'uu' akan diubah menjadi karakter spesial aksara jawa, yakni ꦻ (Dirga Mure) untuk 'ai', ꦻꦴ (Dirga Mure Tarung) untuk 'au', ꦴ (Tarung) untuk 'aa', ꦷ (Dirga Mêlik) untuk 'ii', ꦹ (Dirga Mêndhut) untuk 'uu', ꦋ (Nga Lêlêt Raswadi) untuk 'lêu', dan ꦉꦴ (Pa Cêrêt-Tarung) untuk 'rêu'.</p>
+            </li>
+            <li>
+                <h5>Aksara Swara</h5>
+                <p>Saat diaktifkan, vokal yang berdiri sendiri (tidak memiliki konsonan di awal suku katanya) akan diubah menjadi aksara Swara. 
+                Aksara ini digunakan untuk menuliskan nama atau istilah yang pelafalannya perlu diperjelas — menggantikan ꦲ (aksara Ha) yang memiliki pelafalan ambigu (bisa dibaca a/ha).</p>                
+            </li>
+            {#if method == ConverterMethod.LatinToJava }
+            <li>
+                <h5>Aksara Murda</h5>
+                <p>Saat diaktifkan, aksara pertama dari aksara-aksara ꦤ, ꦏ, ꦠ, ꦱ, ꦥ, ꦘ, ꦒ, ꦧ akan diubah ke dalam bentuk aksara Murda-nya ꦟ, ꦑ, ꦡ, ꦯ, ꦦ, ꦟ, ꦓ, ꦨ.
+                Aksara ini digunakan sebagai penanda untuk penulisan nama, gelar, atau tempat.</p>
             </li>
             <li>
                 <h5>Tombol Karakter Spesial</h5>
                 <p>Berisikan tombol-tombol untuk mengetikkan karakter-karakter spesial yang digunakan untuk merepresentasikan huruf-huruf aksara jawa yang tidak dapat diwakili oleh alfabet A-Z.</p>
                 <p>Berikut karakter-karakter spesial yang digunakan dalam konverter ini beserta hasil konversinya :</p>
                 <ul style="margin-block-end: 1em">
-                    <li>Ê menghasilkan ꦄꦼ (Swara Ê)</li>  
-                    <li>ê menghasilkan  ꦼ (Pepet)</li>
                     <li>ā menghasilkan ꦴ (Tarung)</li>  
-                    <li>ī menghasilkan ꦷ (Dirga Melik)</li>  
-                    <li>ū menghasilkan ꦹ (Dirga Mendhut)</li>
+                    <li>ī menghasilkan ꦷ (Dirga Mêlik)</li>  
+                    <li>ū menghasilkan ꦹ (Dirga Mêndhut)</li>
+                    <li>ê menghasilkan  ꦼ (Pêpêt)</li>
+                    <li>bh menghasilkan ꦨ (Ba Murda)</li>
+                    <li>ch menghasilkan ꦖ (Ca Mahaprana)</li>
                     <li>ḍ menghasilkan ꦝ (Dha)</li>  
                     <li>ḍh menghasilkan ꦞ (Dha Mahaprana)</li> 
+                    <li>jh menghasilkan ꦙ (Ja Mahaprana)</li>
+                    <li>ṛ menghasilkan ꦬ (Ra Agung)</li>
                     <li>ṣ menghasilkan ꦰ (Sa Mahaprana)</li>
                     <li>ś menghasilkan ꦯ (Sa Murda)</li>
                     <li>ṭ menghasilkan ꦡ (Ta Murda)</li> 
                     <li>ṭh menghasilkan ꦜ (Tha Mahaprana)</li> 
                     <li>ṇ menghasilkan ꦟ (Na Murda)</li> 
                     <li>ñ menghasilkan ꦚ (Nya)</li>
-                    <li>ŋ menghasilkan ꦔ (Nga)</li> 
+                    <li>ŋ menghasilkan ꦔ (Nga)</li>
+                    <li>q menghasilkan ꦐ (Ka Sasak)</li> 
                 </ul>
                 <p>Karakter spesial ñ dan ŋ sama dengan ny dan ng dalam bahasa indonesia</p>
             </li>

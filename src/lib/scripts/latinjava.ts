@@ -22,8 +22,6 @@ const wyanjana:{ [id: string]: string; }  = {
     ng: 'ꦔ',      // nga
     ŋ: 'ꦔ',       // nga
     ny: 'ꦚ',       // nya
-    nc: 'ꦚ꧀ꦕ',       // nca
-    nj: 'ꦚ꧀ꦗ',       // nja
     ñ: 'ꦚ',       // nya
     ṇ: 'ꦟ',       // na murda
     p: 'ꦥ',       // pa
@@ -46,25 +44,25 @@ const wyanjana:{ [id: string]: string; }  = {
 }
 
 const swara:{ [id: string]: string; }  = {
-   A: 'ꦄ',       // aksara swara a
-   Ā: 'ꦄꦴ',       // aksara swara aa
-   Aa: 'ꦄꦴ',       // aksara swara aa
-   Ô: 'ꦄ',         // aksara swara aa
-   Ôô: 'ꦄꦴ',        // aksara swara aa
-   I: 'ꦆ',       // aksara swara i
-   Ii: 'ꦇ',       // aksara swara a
-   Ī: 'ꦇ',       // aksara swara a
-   U: 'ꦈ',       // aksara swara u
-   Ū: 'ꦈꦴ',       // aksara swara uu
-   Uu: 'ꦈꦴ',       // aksara swara uu
-   E: 'ꦌ',       // aksara swara e
-   È: 'ꦌ',       // aksara swara e
-   É: 'ꦌ',       // aksara swara e
-   Ê: 'ꦄꦼ',      // aksara swara ê
-   Ě: 'ꦄꦼ',      // aksara swara ê
-   O: 'ꦎ',       // aksara swara o
-   Ai: 'ꦍ',       // aksara swara ai
-   Eu: 'ꦎꦴ',       // aksara swara êu
+   a: 'ꦄ',       // aksara swara a
+   ā: 'ꦄꦴ',       // aksara swara aa
+   aa: 'ꦄꦴ',       // aksara swara aa
+   ô: 'ꦄ',         // aksara swara aa
+   ôô: 'ꦄꦴ',        // aksara swara aa
+   ai: 'ꦍ',       // aksara swara ai
+   ôi: 'ꦍ',       // aksara swara ai
+   au: 'ꦎꦴ',       // aksara swara au
+   ôu: 'ꦎꦴ',       // aksara swara au
+   i: 'ꦆ',       // aksara swara i
+   ii: 'ꦇ',       // aksara swara a
+   ī: 'ꦇ',       // aksara swara a
+   u: 'ꦈ',       // aksara swara u
+   ū: 'ꦈꦴ',       // aksara swara uu
+   uu: 'ꦈꦴ',       // aksara swara uu
+   e: 'ꦌ',       // aksara swara e
+   é: 'ꦌ',       // aksara swara e
+   ê: 'ꦄꦼ',      // aksara swara ê
+   o: 'ꦎ',       // aksara swara o
    lêu: 'ꦋ',       // aksara lêu
    rêu: 'ꦉꦴ',       // aksara rêu
 }
@@ -134,13 +132,12 @@ const angka:{ [id: string]: string; } = {
 }
 
 const pada:{ [id: string]: string; } = {
-    ' ' : '​',
-    '.' : '꧉',
-    ',' : '꧈',
-    '-' : '',
+    ' ':'',
+    '.':'꧉',
+    ',':'꧈',
 }
 
-function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = false, isDiphthong:boolean = false):string {
+function convert(str:string, isIgnoreSpace:boolean = false, isDiphthong:boolean = false, isAksaraSwara = true, isMurda:boolean = false):string {
    var length = str.length;
    var output = [];
    var isMurdaAlreadyIncluded = false;
@@ -168,7 +165,7 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                        var cAfter = str[i + 1];
 
                        if(isVowels(cBefore) && !isVowels(cAfter)) {
-                           output.push(sandhanganPanyigeg[cc]);
+                           output.push(sandhanganPanyigeg[cc.toLowerCase()]);
                            continue;
                        }
                    }
@@ -177,7 +174,7 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                        var cBefore = str[i - 2];
 
                        if(isVowels(cBefore)) {
-                           output.push(sandhanganPanyigeg[cc]);
+                           output.push(sandhanganPanyigeg[cc.toLowerCase()]);
                            continue;
                        }
                    }
@@ -207,10 +204,10 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                }
 
                if(isMurda && !isMurdaAlreadyIncluded && isConsonantsMurda(cc)) {
-                   output.push(murdaConsonants[cc]);
+                   output.push(murdaConsonants[cc.toLowerCase()]);
                    isMurdaAlreadyIncluded = true;
-               } else {
-                   output.push(wyanjana[cc]);
+               } else {              
+                    output.push(wyanjana[cc.toLowerCase()]);
                }
                
                output.push('꧀');
@@ -249,7 +246,7 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                    }
                }
 
-               output.push(sandhanganPanyigeg[c]);
+               output.push(sandhanganPanyigeg[c.toLowerCase()]);
                continue;
            }
        }
@@ -284,7 +281,7 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                    }
                }
 
-               output.push(sandhanganWyanjana[c]);
+               output.push(sandhanganWyanjana[c.toLowerCase()]);
                continue;
            }
        }
@@ -315,56 +312,54 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
            }
 
            if(isMurda && !isMurdaAlreadyIncluded && isConsonantsMurda(c)) {
-               output.push(murdaConsonants[c]);
+               output.push(murdaConsonants[c.toLowerCase()]);
                isMurdaAlreadyIncluded = true;
            } else {
-               output.push(wyanjana[c]);
+               output.push(wyanjana[c.toLowerCase()]);
            }
 
            output.push('꧀');
            continue;
        }
 
-       if(isVowelsSwara(c)) {
-           isAlreadyStacked = false;
+       if(isAksaraSwara && isVowelsSwara(c)) {
+            var cBefore = "";
+            if (i - 1 >= 0)
+                cBefore = str[i - 1];
 
-           // isDiphthong
-           if(isDiphthong && i + 1 < length && isVowels(str[i + 1])) {
-                var c2 = str[i + 1];
+            var isLastOutputEmpty = output.length === 0;
+            var isLastOutputValid = false;
+            var isLastOutputSwara = false;
+            if (output.length - 1 >= 0)
+            {
+                var lastOutputChar = output[output.length - 1];
+                isLastOutputSwara = isSwara(lastOutputChar);
 
-                if(isSwaraA(c) && isVowelsA(c2)) {
-                    output.push(swara['Aa']);
-                    i++;
-                    continue;
-                }
-                
-                if (isSwaraA(c) && isVowelsWulu(c2)) {
-                    output.push(swara['Ai']);
-                    i++;
-                    continue;
-                }
-
-                if(isSwaraI(c) && isVowelsWulu(c2)) {
-                    output.push(swara['Ii']);
-                    i++;
-                    continue;
-                }
-
-                if(isSwaraU(c) && isVowelsSuku(c2)) {
-                    output.push(swara['Uu']);
-                    i++;
-                    continue;
-                }
-
-                if(isSwaraE(c) && isVowelsSuku(c2)) {
-                    output.push(swara['Eu']);
-                    i++;
-                    continue;
+                if (output.length - 2 >= 0) 
+                {
+                    var lastOutputChar2 = output[output.length - 2];
+                    isLastOutputValid = !(isWyanjana(lastOutputChar2) && isPangkon(lastOutputChar)) && !(isWyanjana(lastOutputChar2) && isSandhanganWyanjana(lastOutputChar)) ;
                 }
             }
+            
+            if (isLastOutputEmpty || isLastOutputSwara || isLastOutputValid)
+            {
+                isAlreadyStacked = false;
 
-           output.push(swara[c]);
-           continue;
+                // isDiphthong
+                if(i + 1 < length && isVowels(str[i + 1])) {
+                    var cc = c + str[i + 1];
+    
+                    if(isVowelsSwara(cc)) {
+                        output.push(swara[cc.toLowerCase()]);
+                        i++;
+                        continue;
+                    }
+                }
+    
+                output.push(swara[c.toLowerCase()]);
+                continue;
+            }
        }
        
        if(isVowels(c)) {
@@ -480,10 +475,10 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
                    }
                }
 
-               output.push(sandhanganSwara[c]);
+               output.push(sandhanganSwara[c.toLowerCase()]);
            } else {
                output.push(wyanjana['h']);
-               output.push(sandhanganSwara[c]);
+               output.push(sandhanganSwara[c.toLowerCase()]);
            }
 
            // isDiphthong
@@ -533,26 +528,37 @@ function convert(str:string, isIgnoreSpace:boolean = false, isMurda:boolean = fa
            continue;
        }
 
-       if(isCharactersAngka(c)) {
-        output.push(angka[c]);
-        continue;
-    }
+        if(isCharactersAngka(c)) {
+            isAlreadyStacked = false;
+            output.push(angka[c]);
+            continue;
+        }
        
-       if(isCharactersPada(c)) {
-           isAlreadyStacked = false;
+        if(isCharactersPada(c)) {
+            isAlreadyStacked = false;
 
-           if(isIgnoreSpace && c === ' ') {
-               continue;
-           }
+            if(isWhiteSpace(c)) {
+                if (isIgnoreSpace)
+                    output.push(pada[c]);
+                else
+                    output.push(c);
+                continue;
+            }
 
-           output.push(pada[c]);
-           continue;
+            output.push(pada[c]);
+            continue;
        }
        
+       isAlreadyStacked = false;
        output.push(c);
    }
 
-   return output.join('');
+    // post process
+    let res = output.join('');
+    res = res.replace(/ꦤ꧀ꦗ/g, 'ꦚ꧀ꦗ');
+    res = res.replace(/ꦤ꧀ꦕ/g, 'ꦚ꧀ꦕ');
+
+   return res;
 }
 
 function isWyanjana(key:string) { return Object.values(wyanjana).includes(key); }
@@ -568,6 +574,8 @@ function isWyanjanaPasanganInBelow(wyanjana:string):boolean {
 function isSandhanganWyanjana(key:string):boolean { return Object.values(sandhanganWyanjana).includes(key); }
 
 function isSandhanganPanyigeg(key:string):boolean { return Object.values(sandhanganPanyigeg).includes(key); }
+
+function isSwara(key:string) { return Object.values(swara).includes(key); }
 
 function isConsonants(s:string):boolean { 
    return Object.prototype.hasOwnProperty.call(wyanjana, s.toLowerCase()); 
@@ -586,67 +594,59 @@ function isConsonantsSandhanganWyanjana(s:string):boolean {
 }
 
 function isConsonantL(s:string):boolean { 
-    return s === 'L' || s === 'l';
+    return s.toLowerCase() === 'l';
 }
 
 function isConsonantR(s:string):boolean { 
-    return s === 'R' || s === 'r';
+    return s.toLowerCase() === 'r';
+}
+
+function isConsonantNcOrNj(s:string):boolean { 
+    var c = s.toLowerCase();
+    return c === 'nc' || c === 'nj';
 }
 
 function isVowels(s:string):boolean { 
-   return Object.prototype.hasOwnProperty.call(sandhanganSwara, s); 
+   return Object.prototype.hasOwnProperty.call(sandhanganSwara, s.toLowerCase()); 
 }
 
 function isVowelsSwara(s:string):boolean { 
-   return Object.prototype.hasOwnProperty.call(swara, s); 
+   return Object.prototype.hasOwnProperty.call(swara, s.toLowerCase()); 
 }
 
 function isCharactersAngka(s:string):boolean {
-    return Object.prototype.hasOwnProperty.call(angka, s);
+    return Object.prototype.hasOwnProperty.call(angka, s.toLowerCase());
  }
 
 function isCharactersPada(s:string):boolean {
-   return Object.prototype.hasOwnProperty.call(pada, s);
-}
-
-function isSwaraA(s:string):boolean {
-    return s === 'A' || s === 'Ô';
-}
-
-function isSwaraI(s:string):boolean {
-    return s === 'I';
-}
-
-function isSwaraU(s:string):boolean {
-    return s === 'U';
-}
- 
-function isSwaraE(s:string):boolean {
-    return s === 'E';
+   return Object.prototype.hasOwnProperty.call(pada, s.toLowerCase());
 }
 
 function isVowelsA(s:string):boolean {
-   return s === 'a' || s === 'ô';
+    var c = s.toLowerCase();
+    return c === 'a' || c === 'ô';
 }
 
 function isVowelsPepet(s:string):boolean {
-   return s === 'ê' || s === 'ě';
+    var c = s.toLowerCase();
+    return c === 'ê' || c === 'ě';
 }
 
 function isVowelsWulu(s:string):boolean {
-   return s === 'i';
+    return s.toLowerCase() === 'i';
 }
 
 function isVowelsSuku(s:string):boolean {
-   return s === 'u';
+    return s.toLowerCase() === 'u';
 }
 
 function isVowelsTaling(s:string):boolean {
-   return s === 'e' || s === 'é' || s === 'è';
+    var c = s.toLowerCase();
+    return c === 'e' || c === 'é' || c === 'è';
 }
 
 function isVowelsTalingTarung(s:string):boolean {
-   return s === 'o';
+   return s.toLowerCase() === 'o';
 }
 
 function isPangkon(s:string):boolean {
@@ -655,6 +655,10 @@ function isPangkon(s:string):boolean {
 
 function isCakra(s:string):boolean {
    return s === 'ꦿ';
+}
+
+function isWhiteSpace(s:string):boolean {
+    return s === ' ' || s === '​' || s === " ︀";
 }
 
 export { convert };
