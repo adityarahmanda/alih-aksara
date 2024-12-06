@@ -207,17 +207,13 @@ function insertToTextarea(str:string) {
     var nextCursorPos = textareaEl.selectionStart + str.length;
     textareaEl.value = textareaEl.value.substring(0, textareaEl.selectionStart) + str + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
     input = textareaEl.value;
-    textareaEl.readOnly = true;
-    textareaEl.focus();
-    textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
-    setTimeout(() => textareaEl.readOnly = false, 1);
+    setSelectionRange(textareaEl, nextCursorPos, nextCursorPos);
 }
 
 function onPressBackspace() {
     if (textareaEl.selectionStart == 0 && textareaEl.selectionEnd == 0) 
     {
-        textareaEl.focus();
-        textareaEl.setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd);
+        setSelectionRange(textareaEl, textareaEl.selectionStart, textareaEl.selectionEnd);
         return;
     }
 
@@ -225,17 +221,29 @@ function onPressBackspace() {
     var nextCursorPos = selectionLength == 0 ? textareaEl.selectionStart - 1 : textareaEl.selectionStart;
     textareaEl.value = textareaEl.value.substring(0, nextCursorPos) + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
     input = textareaEl.value;
-
-    textareaEl.focus();
-    textareaEl.setSelectionRange(nextCursorPos, nextCursorPos);
+    setSelectionRange(textareaEl, nextCursorPos, nextCursorPos);
 }
 
 function toggleCapslock()
 {
     isCapslock = !isCapslock;
     javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
-    textareaEl.focus();
-    textareaEl.setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd);
+    setSelectionRange(textareaEl, textareaEl.selectionStart, textareaEl.selectionEnd);
+}
+
+function setSelectionRange(element:HTMLTextAreaElement, selectionStart:number, selectionEnd:number)
+{
+    const isFocused = (document.activeElement === element);
+    if (!isFocused)
+    {
+        element.readOnly = true;
+        element.focus();
+    }
+    
+    element.setSelectionRange(selectionStart, selectionEnd);
+    
+    if (!isFocused)
+        setTimeout(() => element.readOnly = false, 1);
 }
 
 function copyToClipboard(text:string) {
