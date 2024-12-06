@@ -148,7 +148,7 @@ function onInputKeyDown(e:KeyboardEvent) {
         if(isPepetTypeMode == false) return;
 
         if(e.key === "X") {
-            insertToTextarea("Ê");
+            insertToTextarea("Ê", true);
             onInputUpdate();
             e.preventDefault();
             e.stopPropagation();
@@ -156,7 +156,7 @@ function onInputKeyDown(e:KeyboardEvent) {
         }
 
         if(e.key === "x") {
-            insertToTextarea("ê");
+            insertToTextarea("ê", true);
             onInputUpdate();
             e.preventDefault();
             e.stopPropagation();
@@ -174,7 +174,7 @@ function onInputKeyDown(e:KeyboardEvent) {
 
         if (javaKeyboardDictionary.hasOwnProperty(e.key))
         {
-            insertToTextarea(javaKeyboardDictionary[e.key]);
+            insertToTextarea(javaKeyboardDictionary[e.key], false);
             onInputUpdate();
             e.preventDefault();
             e.stopPropagation();
@@ -206,17 +206,17 @@ function onDocumentKeyUp(e:KeyboardEvent) {
     }
 }
 
-function insertToTextarea(str:string) {
+function insertToTextarea(str:string, isShowMobileKeyboard:boolean) {
     var nextCursorPos = textareaEl.selectionStart + str.length;
     textareaEl.value = textareaEl.value.substring(0, textareaEl.selectionStart) + str + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
     input = textareaEl.value;
-    setSelectionRange(nextCursorPos, nextCursorPos);
+    setSelectionRange(nextCursorPos, nextCursorPos, isShowMobileKeyboard);
 }
 
 function onPressBackspace() {
     if (textareaEl.selectionStart == 0 && textareaEl.selectionEnd == 0) 
     {
-        setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd);
+        setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd, false);
         return;
     }
 
@@ -224,26 +224,25 @@ function onPressBackspace() {
     var nextCursorPos = selectionLength == 0 ? textareaEl.selectionStart - 1 : textareaEl.selectionStart;
     textareaEl.value = textareaEl.value.substring(0, nextCursorPos) + textareaEl.value.substring(textareaEl.selectionEnd, textareaEl.value.length);
     input = textareaEl.value;
-    setSelectionRange(nextCursorPos, nextCursorPos);
+    setSelectionRange(nextCursorPos, nextCursorPos, false);
 }
 
 function toggleCapslock()
 {
     isCapslock = !isCapslock;
     javaKeyboard = isCapslock ? javaCapslockKeyboard : javaDefaultKeyboard;
-    setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd);
+    setSelectionRange(textareaEl.selectionStart, textareaEl.selectionEnd, false);
 }
 
-function setSelectionRange(selectionStart:number, selectionEnd:number)
+function setSelectionRange(selectionStart:number, selectionEnd:number, isShowMobileKeyboard:boolean)
 {
-    const isFocused = (prevFocusEl === textareaEl);
-    if (!isFocused)
+    if (!isShowMobileKeyboard)
         textareaEl.readOnly = true;
     
     textareaEl.focus();
     textareaEl.setSelectionRange(selectionStart, selectionEnd);
-    
-    if (!isFocused)
+
+    if (!isShowMobileKeyboard)
         setTimeout(() => textareaEl.readOnly = false, 1);
 }
 
@@ -284,7 +283,7 @@ function onFocus(event:FocusEvent) {
     <div class="row">
         <div class="col-12 converter-input">
             <h4>{ inputTitle() }</h4>
-            <textarea id="converter-input" bind:this={ textareaEl } bind:value={input} on:input={ onInputUpdate } on:keydown={ onInputKeyDown } on:focus={ onFocus }></textarea>
+            <textarea id="converter-input" bind:this={ textareaEl } bind:value={input} on:input={ onInputUpdate } on:keydown={ onInputKeyDown }></textarea>
     
             {#if method == ConverterMethod.LatinToJava || method == ConverterMethod.LatinToKawi }
             <div style="margin-block-start: 1em;">
@@ -320,13 +319,13 @@ function onFocus(event:FocusEvent) {
             <div class="virtual-keyboard">
                 {#if method == ConverterMethod.LatinToJava }
                 {#each javaSpecialCharacters as specialChar}
-                <button class="button outline icon-only" title="{specialChar.title}" on:click= { () => { insertToTextarea(specialChar.char); onInputUpdate(); } } on:focus={ onFocus }>{specialChar.char}</button>
+                <button class="button outline icon-only" title="{specialChar.title}" on:click= { () => { insertToTextarea(specialChar.char, true); onInputUpdate(); } }>{specialChar.char}</button>
                 {/each}
                 {/if}
                 
                 {#if method == ConverterMethod.LatinToKawi }
                 {#each kawiSpecialCharacters as specialChar}
-                <button class="button outline icon-only" on:click= { () => { insertToTextarea(specialChar.char); onInputUpdate(); } } on:focus={ onFocus }>{specialChar.char}</button>
+                <button class="button outline icon-only" on:click= { () => { insertToTextarea(specialChar.char, true); onInputUpdate(); } }>{specialChar.char}</button>
                 {/each}
                 {/if}
             </div>
@@ -341,7 +340,7 @@ function onFocus(event:FocusEvent) {
             </div>
                 {#if isVirtualKeyboardActive }
                 <div class="virtual-keyboard layout">
-                    {#each javaKeyboard as key, i}<button class="button outline icon-only" on:click= { () => { insertToTextarea(key[1]); onInputUpdate(); } } on:focus={ onFocus }>{key[1]}</button>{#if i == 12 || i == 25}<br/>{/if}{#if i == 36}<button class="button outline icon-only" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n'); onInputUpdate(); } } on:focus={ onFocus }> { @html keyReturnSvg } </button><br/><button class="button activatable outline icon-only" class:active={ isCapslock } style="width: 12%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock } on:focus={ onFocus }>{ @html keyCapslockSvg }</button>{/if}{/each}<button class="button outline icon-only" style="width: 12%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } } on:focus={ onFocus }> { @html keyBackspaceSvg } </button><br/><button class="button outline icon-only" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' '); onInputUpdate(); } } on:focus={ onFocus }>{ @html keySpaceSvg }</button>
+                    {#each javaKeyboard as key, i}<button class="button outline icon-only" on:click= { () => { insertToTextarea(key[1], false); onInputUpdate(); } }>{key[1]}</button>{#if i == 12 || i == 25}<br/>{/if}{#if i == 36}<button class="button outline icon-only" style="width: 12%;font-size: 1.25em;" on:click= { () => { insertToTextarea('\n', false); onInputUpdate(); } }> { @html keyReturnSvg } </button><br/><button class="button activatable outline icon-only" class:active={ isCapslock } style="width: 12%;font-size: 1.25em;" on:dblclick={ toggleCapslock } on:click={ toggleCapslock }>{ @html keyCapslockSvg }</button>{/if}{/each}<button class="button outline icon-only" style="width: 12%;font-size: 1.25em;" on:click={ () => { onPressBackspace(); onInputUpdate(); } }> { @html keyBackspaceSvg } </button><br/><button class="button outline icon-only" style="width: 50%;font-size: 1.25em;" on:click= { () => { insertToTextarea(' ', false); onInputUpdate(); } }>{ @html keySpaceSvg }</button>
                 </div>
                 {/if}
             {/if}
