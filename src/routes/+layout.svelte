@@ -40,7 +40,7 @@ onMount(async () => {
 
     <slot />
 
-    <footer class="text-center">
-        <h5>©2021 - <a href="https://adityarahmanda.github.io" class="copyright" style="text-decoration: underline;">Aditya Rahmanda</a></h5>
+    <footer class="text-center" style="flex-grow: 1; align-content:flex-end">
+        <h5><a href="https://adityarahmanda.github.io/alih-aksara/privacy-policy" style="text-decoration: underline;">Kebijakan Privasi</a> | ©2021 - <a href="https://adityarahmanda.github.io" class="copyright" style="text-decoration: underline;" rel="me">Aditya Rahmanda</a></h5>
     </footer>
 </main>
